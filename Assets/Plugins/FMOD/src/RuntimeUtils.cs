@@ -14,9 +14,9 @@ namespace FMOD
         {
             byte[] bytes = guid.ToByteArray();
 
-            Data1 = BitConverter.ToInt32(bytes,  0);
-            Data2 = BitConverter.ToInt32(bytes,  4);
-            Data3 = BitConverter.ToInt32(bytes,  8);
+            Data1 = BitConverter.ToInt32(bytes, 0);
+            Data2 = BitConverter.ToInt32(bytes, 4);
+            Data3 = BitConverter.ToInt32(bytes, 8);
             Data4 = BitConverter.ToInt32(bytes, 12);
         }
 
@@ -30,9 +30,9 @@ namespace FMOD
             get
             {
                 return Data1 == 0
-                    && Data2 == 0
-                    && Data3 == 0
-                    && Data4 == 0;
+                       && Data2 == 0
+                       && Data3 == 0
+                       && Data4 == 0;
             }
         }
 
@@ -44,17 +44,17 @@ namespace FMOD
         public bool Equals(GUID other)
         {
             return Data1 == other.Data1
-                && Data2 == other.Data2
-                && Data3 == other.Data3
-                && Data4 == other.Data4;
+                   && Data2 == other.Data2
+                   && Data3 == other.Data3
+                   && Data4 == other.Data4;
         }
 
-        public static bool operator==(GUID a, GUID b)
+        public static bool operator ==(GUID a, GUID b)
         {
             return a.Equals(b);
         }
 
-        public static bool operator!=(GUID a, GUID b)
+        public static bool operator !=(GUID a, GUID b)
         {
             return !a.Equals(b);
         }
@@ -67,17 +67,17 @@ namespace FMOD
         public static implicit operator Guid(GUID guid)
         {
             return new Guid(guid.Data1,
-                    (short) ((guid.Data2 >>  0) & 0xFFFF),
-                    (short) ((guid.Data2 >> 16) & 0xFFFF),
-                    (byte)  ((guid.Data3 >>  0) & 0xFF),
-                    (byte)  ((guid.Data3 >>  8) & 0xFF),
-                    (byte)  ((guid.Data3 >> 16) & 0xFF),
-                    (byte)  ((guid.Data3 >> 24) & 0xFF),
-                    (byte)  ((guid.Data4 >>  0) & 0xFF),
-                    (byte)  ((guid.Data4 >>  8) & 0xFF),
-                    (byte)  ((guid.Data4 >> 16) & 0xFF),
-                    (byte)  ((guid.Data4 >> 24) & 0xFF)
-                );
+                (short)((guid.Data2 >> 0) & 0xFFFF),
+                (short)((guid.Data2 >> 16) & 0xFFFF),
+                (byte)((guid.Data3 >> 0) & 0xFF),
+                (byte)((guid.Data3 >> 8) & 0xFF),
+                (byte)((guid.Data3 >> 16) & 0xFF),
+                (byte)((guid.Data3 >> 24) & 0xFF),
+                (byte)((guid.Data4 >> 0) & 0xFF),
+                (byte)((guid.Data4 >> 8) & 0xFF),
+                (byte)((guid.Data4 >> 16) & 0xFF),
+                (byte)((guid.Data4 >> 24) & 0xFF)
+            );
         }
 
         public override string ToString()
@@ -145,11 +145,13 @@ namespace FMODUnity
         public FMOD.RESULT Result;
 
         public BankLoadException(string path, FMOD.RESULT result)
-            : base(string.Format("[FMOD] Could not load bank '{0}' : {1} : {2}", path, result.ToString(), FMOD.Error.String(result)))
+            : base(string.Format("[FMOD] Could not load bank '{0}' : {1} : {2}", path, result.ToString(),
+                FMOD.Error.String(result)))
         {
             Path = path;
             Result = result;
         }
+
         public BankLoadException(string path, string error)
             : base(string.Format("[FMOD] Could not load bank '{0}' : {1}", path, error))
         {
@@ -164,7 +166,8 @@ namespace FMODUnity
         public string Location;
 
         public SystemNotInitializedException(FMOD.RESULT result, string location)
-            : base(string.Format("[FMOD] Initialization failed : {2} : {0} : {1}", result.ToString(), FMOD.Error.String(result), location))
+            : base(string.Format("[FMOD] Initialization failed : {2} : {0} : {1}", result.ToString(),
+                FMOD.Error.String(result), location))
         {
             Result = result;
             Location = location;
@@ -290,7 +293,9 @@ namespace FMODUnity
         public CodecType format;
         public int channels;
 
-        public CodecChannelCount() { }
+        public CodecChannelCount()
+        {
+        }
 
         public CodecChannelCount(CodecChannelCount other)
         {
@@ -520,7 +525,6 @@ namespace FMODUnity
         public static void EnforceLibraryOrder()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-
             AndroidJavaClass jSystem = new AndroidJavaClass("java.lang.System");
             jSystem.CallStatic("loadLibrary", FMOD.VERSION.dll);
             jSystem.CallStatic("loadLibrary", FMOD.Studio.STUDIO_VERSION.dll);

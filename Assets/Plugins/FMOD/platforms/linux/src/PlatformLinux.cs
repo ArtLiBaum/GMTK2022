@@ -34,7 +34,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformLinux>("b7716510a1f36934c87976f3a81dbf3d");
         }
 
-        public override string DisplayName { get { return "Linux"; } }
+        public override string DisplayName
+        {
+            get { return "Linux"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.LinuxPlayer, this);
@@ -46,14 +50,18 @@ namespace FMODUnity
             yield return BuildTarget.StandaloneLinux64;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Linux; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.Linux; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("linux", "Plugins");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield return new FileRecord(string.Format("x86_64/libfmodstudio{0}.so", suffix));
         }
@@ -85,19 +93,20 @@ namespace FMODUnity
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Pulse Audio", outputType = FMOD.OUTPUTTYPE.PULSEAUDIO },
-           new OutputType() { displayName = "Advanced Linux Sound Architecture", outputType = FMOD.OUTPUTTYPE.ALSA },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "Pulse Audio", outputType = FMOD.OUTPUTTYPE.PULSEAUDIO },
+            new OutputType() { displayName = "Advanced Linux Sound Architecture", outputType = FMOD.OUTPUTTYPE.ALSA },
         };
 #endif
 
-        public override List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
+        public override List<CodecChannelCount> DefaultCodecChannels
+        {
+            get { return staticCodecChannels; }
+        }
 
         private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
         {

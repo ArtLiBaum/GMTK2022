@@ -62,7 +62,8 @@ namespace FMODUnity
 #if UNITY_EDITOR
         public const int MaximumCoreCount = 16;
 
-        public static readonly FileLayout[] OldFileLayouts = {
+        public static readonly FileLayout[] OldFileLayouts =
+        {
             FileLayout.Release_1_10,
             FileLayout.Release_2_0,
             FileLayout.Release_2_1,
@@ -79,33 +80,25 @@ namespace FMODUnity
         // * As a key for SettingsEditor UI state
         // It should be kept stable for concrete platforms (like PlatformWindows) to support
         // settings migration in the future.
-        [SerializeField]
-        private string identifier;
+        [SerializeField] private string identifier;
 
-        [SerializeField]
-        private string parentIdentifier;
+        [SerializeField] private string parentIdentifier;
 
-        [SerializeField]
-        private bool active = false;
+        [SerializeField] private bool active = false;
 
-        [SerializeField]
-        protected PropertyStorage Properties = new PropertyStorage();
+        [SerializeField] protected PropertyStorage Properties = new PropertyStorage();
 
-        [SerializeField]
-        [FormerlySerializedAs("outputType")]
+        [SerializeField] [FormerlySerializedAs("outputType")]
         public string OutputTypeName;
 
         private static List<ThreadAffinityGroup> StaticThreadAffinities = new List<ThreadAffinityGroup>();
 
-        [SerializeField]
-        private PropertyThreadAffinityList threadAffinities = new PropertyThreadAffinityList();
+        [SerializeField] private PropertyThreadAffinityList threadAffinities = new PropertyThreadAffinityList();
 
 #if UNITY_EDITOR
-        [SerializeField]
-        private float displaySortOrder;
+        [SerializeField] private float displaySortOrder;
 
-        [SerializeField]
-        private List<string> childIdentifiers = new List<string>();
+        [SerializeField] private List<string> childIdentifiers = new List<string>();
 #else
         // The parent platform from which this platform inherits its property values.
         [NonSerialized]
@@ -114,15 +107,9 @@ namespace FMODUnity
 
         public string Identifier
         {
-            get
-            {
-                return identifier;
-            }
+            get { return identifier; }
 
-            set
-            {
-                identifier = value;
-            }
+            set { identifier = value; }
         }
 
         // The display name to show for this platform in the UI.
@@ -143,16 +130,25 @@ namespace FMODUnity
 
         // The priority to use when finding a platform to support the current Unity runtime
         // platform (higher priorities are tried first).
-        public virtual float Priority { get { return DefaultPriority; } }
+        public virtual float Priority
+        {
+            get { return DefaultPriority; }
+        }
 
         // Determines whether this platform matches the current environment. When more than one
         // platform implements the current Unity runtime platform, FMOD for Unity will use the
         // highest-priority platform that returns true from MatchesCurrentEnvironment.
-        public virtual bool MatchesCurrentEnvironment { get { return true; } }
+        public virtual bool MatchesCurrentEnvironment
+        {
+            get { return true; }
+        }
 
         // Whether this platform is a fixed part of the FMOD for Unity settings, or can be
         // added/removed by the user.
-        public virtual bool IsIntrinsic { get { return false; } }
+        public virtual bool IsIntrinsic
+        {
+            get { return false; }
+        }
 
         // A hook for platform-specific initialization logic. RuntimeManager.Initialize calls this
         // before calling FMOD.Studio.System.create.
@@ -183,7 +179,8 @@ namespace FMODUnity
             All = Release | Logging | Optional | AllVariants
         }
 
-        protected virtual IEnumerable<string> GetBinaryPaths(BuildTarget buildTarget, BinaryType binaryType, string prefix)
+        protected virtual IEnumerable<string> GetBinaryPaths(BuildTarget buildTarget, BinaryType binaryType,
+            string prefix)
         {
             foreach (BinaryFileInfo info in GetBinaryFileInfo(buildTarget, binaryType))
             {
@@ -473,7 +470,8 @@ namespace FMODUnity
 
         protected abstract BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget);
 
-        protected abstract IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix);
+        protected abstract IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix);
 
         protected virtual IEnumerable<FileRecord> GetOptionalBinaryFiles(BuildTarget buildTarget, bool allVariants)
         {
@@ -490,7 +488,10 @@ namespace FMODUnity
             yield break;
         }
 
-        public virtual bool IsFMODStaticallyLinked { get { return false; } }
+        public virtual bool IsFMODStaticallyLinked
+        {
+            get { return false; }
+        }
 
         public virtual bool SupportsAdditionalCPP(BuildTarget target)
         {
@@ -639,29 +640,17 @@ namespace FMODUnity
 
         public string ParentIdentifier
         {
-            get
-            {
-                return parentIdentifier;
-            }
+            get { return parentIdentifier; }
 
-            set
-            {
-                parentIdentifier = value;
-            }
+            set { parentIdentifier = value; }
         }
 
 #if UNITY_EDITOR
         public float DisplaySortOrder
         {
-            get
-            {
-                return displaySortOrder;
-            }
+            get { return displaySortOrder; }
 
-            set
-            {
-                displaySortOrder = value;
-            }
+            set { displaySortOrder = value; }
         }
 #endif
 
@@ -819,7 +808,10 @@ namespace FMODUnity
         }
 
         // Whether this platform is active in the settings UI.
-        public bool Active { get { return active; } }
+        public bool Active
+        {
+            get { return active; }
+        }
 
         // Whether this platform has any properties that are not inherited from the parent.
         public bool HasAnyOverriddenProperties
@@ -827,98 +819,153 @@ namespace FMODUnity
             get
             {
                 return active &&
-                    (
-                        Properties.LiveUpdate.HasValue
-                        || Properties.LiveUpdatePort.HasValue
-                        || Properties.Overlay.HasValue
-                        || Properties.Logging.HasValue
-                        || Properties.SampleRate.HasValue
-                        || Properties.BuildDirectory.HasValue
-                        || Properties.SpeakerMode.HasValue
-                        || Properties.VirtualChannelCount.HasValue
-                        || Properties.RealChannelCount.HasValue
-                        || Properties.DSPBufferLength.HasValue
-                        || Properties.DSPBufferCount.HasValue
-                        || Properties.Plugins.HasValue
-                        || Properties.StaticPlugins.HasValue
-                    );
+                       (
+                           Properties.LiveUpdate.HasValue
+                           || Properties.LiveUpdatePort.HasValue
+                           || Properties.Overlay.HasValue
+                           || Properties.Logging.HasValue
+                           || Properties.SampleRate.HasValue
+                           || Properties.BuildDirectory.HasValue
+                           || Properties.SpeakerMode.HasValue
+                           || Properties.VirtualChannelCount.HasValue
+                           || Properties.RealChannelCount.HasValue
+                           || Properties.DSPBufferLength.HasValue
+                           || Properties.DSPBufferCount.HasValue
+                           || Properties.Plugins.HasValue
+                           || Properties.StaticPlugins.HasValue
+                       );
             }
         }
 
         // These accessors provide (possibly inherited) property values.
-        public TriStateBool LiveUpdate { get { return PropertyAccessors.LiveUpdate.Get(this); } }
-        public int LiveUpdatePort { get { return PropertyAccessors.LiveUpdatePort.Get(this); } }
-        public TriStateBool Overlay { get { return PropertyAccessors.Overlay.Get(this); } }
-        public TriStateBool Logging { get { return PropertyAccessors.Logging.Get(this); } }
-        public int SampleRate { get { return PropertyAccessors.SampleRate.Get(this); } }
-        public string BuildDirectory { get { return PropertyAccessors.BuildDirectory.Get(this); } }
-        public FMOD.SPEAKERMODE SpeakerMode { get { return PropertyAccessors.SpeakerMode.Get(this); } }
-        public int VirtualChannelCount { get { return PropertyAccessors.VirtualChannelCount.Get(this); } }
-        public int RealChannelCount { get { return PropertyAccessors.RealChannelCount.Get(this); } }
-        public int DSPBufferLength { get { return PropertyAccessors.DSPBufferLength.Get(this); } }
-        public int DSPBufferCount { get { return PropertyAccessors.DSPBufferCount.Get(this); } }
-        public List<string> Plugins { get { return PropertyAccessors.Plugins.Get(this); } }
-        public List<string> StaticPlugins { get { return PropertyAccessors.StaticPlugins.Get(this); } }
-        public PlatformCallbackHandler CallbackHandler { get { return PropertyAccessors.CallbackHandler.Get(this); } }
+        public TriStateBool LiveUpdate
+        {
+            get { return PropertyAccessors.LiveUpdate.Get(this); }
+        }
+
+        public int LiveUpdatePort
+        {
+            get { return PropertyAccessors.LiveUpdatePort.Get(this); }
+        }
+
+        public TriStateBool Overlay
+        {
+            get { return PropertyAccessors.Overlay.Get(this); }
+        }
+
+        public TriStateBool Logging
+        {
+            get { return PropertyAccessors.Logging.Get(this); }
+        }
+
+        public int SampleRate
+        {
+            get { return PropertyAccessors.SampleRate.Get(this); }
+        }
+
+        public string BuildDirectory
+        {
+            get { return PropertyAccessors.BuildDirectory.Get(this); }
+        }
+
+        public FMOD.SPEAKERMODE SpeakerMode
+        {
+            get { return PropertyAccessors.SpeakerMode.Get(this); }
+        }
+
+        public int VirtualChannelCount
+        {
+            get { return PropertyAccessors.VirtualChannelCount.Get(this); }
+        }
+
+        public int RealChannelCount
+        {
+            get { return PropertyAccessors.RealChannelCount.Get(this); }
+        }
+
+        public int DSPBufferLength
+        {
+            get { return PropertyAccessors.DSPBufferLength.Get(this); }
+        }
+
+        public int DSPBufferCount
+        {
+            get { return PropertyAccessors.DSPBufferCount.Get(this); }
+        }
+
+        public List<string> Plugins
+        {
+            get { return PropertyAccessors.Plugins.Get(this); }
+        }
+
+        public List<string> StaticPlugins
+        {
+            get { return PropertyAccessors.StaticPlugins.Get(this); }
+        }
+
+        public PlatformCallbackHandler CallbackHandler
+        {
+            get { return PropertyAccessors.CallbackHandler.Get(this); }
+        }
 
         // These accessors provide full access to properties.
         public static class PropertyAccessors
         {
             public static readonly PropertyAccessor<TriStateBool> LiveUpdate
-                    = new PropertyAccessor<TriStateBool>(properties => properties.LiveUpdate, TriStateBool.Disabled);
+                = new PropertyAccessor<TriStateBool>(properties => properties.LiveUpdate, TriStateBool.Disabled);
 
             public static readonly PropertyAccessor<int> LiveUpdatePort
-                    = new PropertyAccessor<int>(properties => properties.LiveUpdatePort, 9264);
+                = new PropertyAccessor<int>(properties => properties.LiveUpdatePort, 9264);
 
             public static readonly PropertyAccessor<TriStateBool> Overlay
-                    = new PropertyAccessor<TriStateBool>(properties => properties.Overlay, TriStateBool.Disabled);
+                = new PropertyAccessor<TriStateBool>(properties => properties.Overlay, TriStateBool.Disabled);
 
             public static readonly PropertyAccessor<TriStateBool> Logging
-                    = new PropertyAccessor<TriStateBool>(properties => properties.Logging, TriStateBool.Disabled);
+                = new PropertyAccessor<TriStateBool>(properties => properties.Logging, TriStateBool.Disabled);
 
             public static readonly PropertyAccessor<int> SampleRate
-                    = new PropertyAccessor<int>(properties => properties.SampleRate, 0);
+                = new PropertyAccessor<int>(properties => properties.SampleRate, 0);
 
             public static readonly PropertyAccessor<string> BuildDirectory
-                    = new PropertyAccessor<string>(properties => properties.BuildDirectory, "Desktop");
+                = new PropertyAccessor<string>(properties => properties.BuildDirectory, "Desktop");
 
             public static readonly PropertyAccessor<FMOD.SPEAKERMODE> SpeakerMode
-                    = new PropertyAccessor<FMOD.SPEAKERMODE>(properties => properties.SpeakerMode, FMOD.SPEAKERMODE.STEREO);
+                = new PropertyAccessor<FMOD.SPEAKERMODE>(properties => properties.SpeakerMode, FMOD.SPEAKERMODE.STEREO);
 
             public static readonly PropertyAccessor<int> VirtualChannelCount
-                    = new PropertyAccessor<int>(properties => properties.VirtualChannelCount, 128);
+                = new PropertyAccessor<int>(properties => properties.VirtualChannelCount, 128);
 
             public static readonly PropertyAccessor<int> RealChannelCount
-                    = new PropertyAccessor<int>(properties => properties.RealChannelCount, 32);
+                = new PropertyAccessor<int>(properties => properties.RealChannelCount, 32);
 
             public static readonly PropertyAccessor<int> DSPBufferLength
-                    = new PropertyAccessor<int>(properties => properties.DSPBufferLength, 0);
+                = new PropertyAccessor<int>(properties => properties.DSPBufferLength, 0);
 
             public static readonly PropertyAccessor<int> DSPBufferCount
-                    = new PropertyAccessor<int>(properties => properties.DSPBufferCount, 0);
+                = new PropertyAccessor<int>(properties => properties.DSPBufferCount, 0);
 
             public static readonly PropertyAccessor<List<string>> Plugins
-                    = new PropertyAccessor<List<string>>(properties => properties.Plugins, null);
+                = new PropertyAccessor<List<string>>(properties => properties.Plugins, null);
 
             public static readonly PropertyAccessor<List<string>> StaticPlugins
-                    = new PropertyAccessor<List<string>>(properties => properties.StaticPlugins, null);
+                = new PropertyAccessor<List<string>>(properties => properties.StaticPlugins, null);
 
             public static readonly PropertyAccessor<PlatformCallbackHandler> CallbackHandler
-                    = new PropertyAccessor<PlatformCallbackHandler>(properties => properties.CallbackHandler, null);
+                = new PropertyAccessor<PlatformCallbackHandler>(properties => properties.CallbackHandler, null);
         }
 
 #if UNITY_EDITOR
         // The parent platform from which this platform inherits its property values.
         public Platform Parent
         {
-            get
-            {
-                return (ParentIdentifier != null) ? Settings.Instance.FindPlatform(ParentIdentifier) : null;
-            }
+            get { return (ParentIdentifier != null) ? Settings.Instance.FindPlatform(ParentIdentifier) : null; }
         }
 
         // The platforms which inherit their property values from this platform.
-        public List<string> ChildIdentifiers { get { return childIdentifiers; } } 
+        public List<string> ChildIdentifiers
+        {
+            get { return childIdentifiers; }
+        }
 #endif
 
         // Checks whether this platform inherits from the given platform, so we can avoid creating
@@ -945,6 +992,7 @@ namespace FMODUnity
             {
                 return (FMOD.OUTPUTTYPE)Enum.Parse(typeof(FMOD.OUTPUTTYPE), OutputTypeName);
             }
+
             return FMOD.OUTPUTTYPE.AUTODETECT;
         }
 
@@ -957,10 +1005,16 @@ namespace FMODUnity
 
         public abstract OutputType[] ValidOutputTypes { get; }
 
-        public virtual int CoreCount { get { return 0; } }
+        public virtual int CoreCount
+        {
+            get { return 0; }
+        }
 #endif
 
-        public virtual List<ThreadAffinityGroup> DefaultThreadAffinities { get { return StaticThreadAffinities; } }
+        public virtual List<ThreadAffinityGroup> DefaultThreadAffinities
+        {
+            get { return StaticThreadAffinities; }
+        }
 
         [Serializable]
         public class PropertyThreadAffinityList : Property<List<ThreadAffinityGroup>>
@@ -982,9 +1036,15 @@ namespace FMODUnity
             }
         }
 
-        public PropertyThreadAffinityList ThreadAffinitiesProperty { get { return threadAffinities; } }
+        public PropertyThreadAffinityList ThreadAffinitiesProperty
+        {
+            get { return threadAffinities; }
+        }
 
-        public virtual List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
+        public virtual List<CodecChannelCount> DefaultCodecChannels
+        {
+            get { return staticCodecChannels; }
+        }
 
         private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
         {
@@ -997,8 +1057,7 @@ namespace FMODUnity
         {
         }
 
-        [SerializeField]
-        private PropertyCodecChannels codecChannels = new PropertyCodecChannels();
+        [SerializeField] private PropertyCodecChannels codecChannels = new PropertyCodecChannels();
 
         public List<CodecChannelCount> CodecChannels
         {
@@ -1015,6 +1074,9 @@ namespace FMODUnity
             }
         }
 
-        public PropertyCodecChannels CodecChannelsProperty { get { return codecChannels; } }
+        public PropertyCodecChannels CodecChannelsProperty
+        {
+            get { return codecChannels; }
+        }
     }
 }

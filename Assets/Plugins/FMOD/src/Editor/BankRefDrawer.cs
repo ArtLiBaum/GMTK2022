@@ -9,7 +9,7 @@ namespace FMODUnity
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             Texture browseIcon = EditorUtils.LoadImage("SearchIconBlack.png");
-            
+
             SerializedProperty pathProperty = property;
 
             EditorGUI.BeginProperty(position, label, property);
@@ -26,6 +26,7 @@ namespace FMODUnity
                     e.Use();
                 }
             }
+
             if (e.type == EventType.DragUpdated && position.Contains(e.mousePosition))
             {
                 if (DragAndDrop.objectReferences.Length > 0 &&
@@ -45,7 +46,8 @@ namespace FMODUnity
             var buttonStyle = new GUIStyle(GUI.skin.button);
             buttonStyle.padding.top = buttonStyle.padding.bottom = 1;
 
-            Rect searchRect = new Rect(position.x + position.width - browseIcon.width - 15, position.y, browseIcon.width + 10, baseHeight);
+            Rect searchRect = new Rect(position.x + position.width - browseIcon.width - 15, position.y,
+                browseIcon.width + 10, baseHeight);
             Rect pathRect = new Rect(position.x, position.y, searchRect.x - position.x - 5, baseHeight);
 
             EditorGUI.PropertyField(pathRect, pathProperty, GUIContent.none);
@@ -62,5 +64,5 @@ namespace FMODUnity
 
             EditorGUI.EndProperty();
         }
-    }    
+    }
 }

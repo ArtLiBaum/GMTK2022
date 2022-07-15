@@ -103,7 +103,8 @@ namespace FMODUnity
                     SerializedProperty current = parametersProperty.GetArrayElementAtIndex(i);
                     SerializedProperty name = current.FindPropertyRelative("Name");
 
-                    EditorParamRef paramRef = editorEventRef.LocalParameters.FirstOrDefault(p => p.Name == name.stringValue);
+                    EditorParamRef paramRef =
+                        editorEventRef.LocalParameters.FirstOrDefault(p => p.Name == name.stringValue);
 
                     if (paramRef != null)
                     {
@@ -116,7 +117,7 @@ namespace FMODUnity
                     }
                 }
 
-                foreach(string name in namesToDelete)
+                foreach (string name in namesToDelete)
                 {
                     DeleteInitialParameterValue(name);
                 }
@@ -134,7 +135,7 @@ namespace FMODUnity
                     }
                 }
 
-                foreach(string name in namesToDelete)
+                foreach (string name in namesToDelete)
                 {
                     DeleteParameterAutomation(name);
                 }
@@ -201,12 +202,12 @@ namespace FMODUnity
         {
             GenericMenu menu = new GenericMenu();
             menu.AddItem(new GUIContent("All"), false, () =>
+            {
+                foreach (EditorParamRef parameter in missingInitialParameterValues)
                 {
-                    foreach (EditorParamRef parameter in missingInitialParameterValues)
-                    {
-                        AddInitialParameterValue(parameter);
-                    }
-                });
+                    AddInitialParameterValue(parameter);
+                }
+            });
 
             menu.AddSeparator(string.Empty);
 
@@ -220,10 +221,7 @@ namespace FMODUnity
                 }
 
                 menu.AddItem(new GUIContent(text), false,
-                    (userData) =>
-                    {
-                        AddInitialParameterValue(userData as EditorParamRef);
-                    },
+                    (userData) => { AddInitialParameterValue(userData as EditorParamRef); },
                     parameter);
             }
 
@@ -283,12 +281,12 @@ namespace FMODUnity
         {
             GenericMenu menu = new GenericMenu();
             menu.AddItem(new GUIContent("All"), false, () =>
+            {
+                foreach (EditorParamRef parameter in missingParameterAutomations)
                 {
-                    foreach (EditorParamRef parameter in missingParameterAutomations)
-                    {
-                        AddParameterAutomation(parameter.Name);
-                    }
-                });
+                    AddParameterAutomation(parameter.Name);
+                }
+            });
 
             menu.AddSeparator(string.Empty);
 
@@ -302,10 +300,7 @@ namespace FMODUnity
                 }
 
                 menu.AddItem(new GUIContent(text), false,
-                    (userData) =>
-                    {
-                        AddParameterAutomation(userData as string);
-                    },
+                    (userData) => { AddParameterAutomation(userData as string); },
                     parameter.Name);
             }
 
@@ -378,7 +373,8 @@ namespace FMODUnity
             {
                 DeleteParameterAutomation(editorParamRef.Name);
 
-                parametersProperty.ArrayAdd(p => {
+                parametersProperty.ArrayAdd(p =>
+                {
                     p.FindPropertyRelative("Name").stringValue = editorParamRef.Name;
                     p.FindPropertyRelative("Value").floatValue = editorParamRef.Default;
                 });
@@ -432,7 +428,8 @@ namespace FMODUnity
                 {
                     DeleteInitialParameterValue(name);
 
-                    parameterLinksProperty.ArrayAdd(p => {
+                    parameterLinksProperty.ArrayAdd(p =>
+                    {
                         p.FindPropertyRelative("Name").stringValue = name;
                         p.FindPropertyRelative("Slot").intValue = slot;
                     });
@@ -483,7 +480,8 @@ namespace FMODUnity
 
         private static EditorCurveBinding GetParameterCurveBinding(int index)
         {
-            EditorCurveBinding result = new EditorCurveBinding() {
+            EditorCurveBinding result = new EditorCurveBinding()
+            {
                 path = string.Empty,
                 type = typeof(FMODEventPlayable),
                 propertyName = string.Format("parameterAutomation.slot{0:D2}", index),

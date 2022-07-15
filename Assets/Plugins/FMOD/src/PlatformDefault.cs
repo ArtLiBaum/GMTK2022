@@ -15,28 +15,41 @@ namespace FMODUnity
             Identifier = ConstIdentifier;
         }
 
-        public override string DisplayName { get { return "Default"; } }
-        public override void DeclareRuntimePlatforms(Settings settings) { }
+        public override string DisplayName
+        {
+            get { return "Default"; }
+        }
+
+        public override void DeclareRuntimePlatforms(Settings settings)
+        {
+        }
 #if UNITY_EDITOR
         public override IEnumerable<BuildTarget> GetBuildTargets()
         {
             yield break;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Default; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.Default; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return null;
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield break;
         }
 #endif
 
-        public override bool IsIntrinsic { get { return true; } }
+        public override bool IsIntrinsic
+        {
+            get { return true; }
+        }
 
         public override void InitializeProperties()
         {
@@ -58,7 +71,10 @@ namespace FMODUnity
 
         // null means no valid output types - don't display the field in the UI
 #if UNITY_EDITOR
-        public override OutputType[] ValidOutputTypes { get { return null; } }
+        public override OutputType[] ValidOutputTypes
+        {
+            get { return null; }
+        }
 #endif
     }
 }

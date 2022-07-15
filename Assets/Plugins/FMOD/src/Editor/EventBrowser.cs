@@ -11,34 +11,26 @@ namespace FMODUnity
 {
     public class EventBrowser : EditorWindow, ISerializationCallbackReceiver
     {
-        [SerializeField]
-        private bool isStandaloneWindow;
+        [SerializeField] private bool isStandaloneWindow;
 
-        [NonSerialized]
-        private float nextRepaintTime;
+        [NonSerialized] private float nextRepaintTime;
 
-        [NonSerialized]
-        private float[] cachedMetering;
+        [NonSerialized] private float[] cachedMetering;
 
         private const float RepaintInterval = 1 / 30.0f;
 
         private Texture2D borderIcon;
         private GUIStyle borderStyle;
 
-        [NonSerialized]
-        private TreeView treeView;
+        [NonSerialized] private TreeView treeView;
 
-        [NonSerialized]
-        private SearchField searchField;
+        [NonSerialized] private SearchField searchField;
 
-        [SerializeField]
-        private PreviewArea previewArea = new PreviewArea();
+        [SerializeField] private PreviewArea previewArea = new PreviewArea();
 
-        [SerializeField]
-        private TreeView.State treeViewState;
+        [SerializeField] private TreeView.State treeViewState;
 
-        [NonSerialized]
-        private DateTime LastKnownCacheTime;
+        [NonSerialized] private DateTime LastKnownCacheTime;
 
         private SerializedProperty outputProperty;
 
@@ -55,10 +47,7 @@ namespace FMODUnity
             EditorUtils.LoadPreviewBanks();
         }
 
-        public static bool IsOpen
-        {
-            get; private set;
-        }
+        public static bool IsOpen { get; private set; }
 
         public void OnBeforeSerialize()
         {
@@ -85,8 +74,9 @@ namespace FMODUnity
                 ReadEventCache();
                 forceRepaint = true;
             }
-            
-            if (forceRepaint || (previewArea != null && previewArea.forceRepaint && nextRepaintTime < Time.realtimeSinceStartup))
+
+            if (forceRepaint || (previewArea != null && previewArea.forceRepaint &&
+                                 nextRepaintTime < Time.realtimeSinceStartup))
             {
                 Repaint();
                 nextRepaintTime = Time.time + RepaintInterval;
@@ -106,8 +96,13 @@ namespace FMODUnity
             private static readonly Texture2D eventIcon = EditorUtils.LoadImage("EventIcon.png");
             private static readonly Texture2D snapshotIcon = EditorUtils.LoadImage("SnapshotIcon.png");
             private static readonly Texture2D bankIcon = EditorUtils.LoadImage("BankIcon.png");
-            private static readonly Texture2D continuousParameterIcon = EditorUtils.LoadImage("ContinuousParameterIcon.png");
-            private static readonly Texture2D discreteParameterIcon = EditorUtils.LoadImage("DiscreteParameterIcon.png");
+
+            private static readonly Texture2D continuousParameterIcon =
+                EditorUtils.LoadImage("ContinuousParameterIcon.png");
+
+            private static readonly Texture2D
+                discreteParameterIcon = EditorUtils.LoadImage("DiscreteParameterIcon.png");
+
             private static readonly Texture2D labeledParameterIcon = EditorUtils.LoadImage("LabeledParameterIcon.png");
 
             private Dictionary<string, int> itemIDs = new Dictionary<string, int>();
@@ -196,7 +191,7 @@ namespace FMODUnity
                     expanded = false;
                 }
                 else if (forceExpanded || expandNextFolderSet
-                    || (nextFramedItemPath != null && nextFramedItemPath.StartsWith(path)))
+                                       || (nextFramedItemPath != null && nextFramedItemPath.StartsWith(path)))
                 {
                     SetExpanded(item.id, true);
                     expanded = true;
@@ -301,7 +296,8 @@ namespace FMODUnity
 
                 if (hasSearch)
                 {
-                    records = records.Where(r => {
+                    records = records.Where(r =>
+                    {
                         foreach (var word in searchStringSplit)
                         {
                             if (word.Length > 0 && r.path.IndexOf(word, StringComparison.OrdinalIgnoreCase) < 0)
@@ -309,6 +305,7 @@ namespace FMODUnity
                                 return false;
                             }
                         }
+
                         return true;
                     });
                 }
@@ -371,7 +368,7 @@ namespace FMODUnity
                 EditorParamRef paramRef = record as EditorParamRef;
                 if (paramRef != null)
                 {
-                    switch(paramRef.Type)
+                    switch (paramRef.Type)
                     {
                         case ParameterType.Continuous:
                             return continuousParameterIcon;
@@ -395,7 +392,7 @@ namespace FMODUnity
                 // Skip the type prefix at the start of the path
                 int elementStart = path.IndexOf(separator) + 1;
 
-                for (int i = 0; ; ++i)
+                for (int i = 0;; ++i)
                 {
                     if (!IsExpanded(parent.id))
                     {
@@ -445,7 +442,8 @@ namespace FMODUnity
                         AddChildrenInOrder(list, child);
                     }
 
-                    foreach (TreeViewItem child in item.children.Where(child => !(child == null || child is FolderItem)))
+                    foreach (TreeViewItem child in
+                             item.children.Where(child => !(child == null || child is FolderItem)))
                     {
                         list.Add(child);
                     }
@@ -657,7 +655,10 @@ namespace FMODUnity
             }
         }
 
-        private bool InChooserMode { get { return outputProperty != null; } }
+        private bool InChooserMode
+        {
+            get { return outputProperty != null; }
+        }
 
         private void OnGUI()
         {
@@ -738,32 +739,28 @@ namespace FMODUnity
         [Serializable]
         private class PreviewArea
         {
-            [NonSerialized]
-            public TreeView treeView;
+            [NonSerialized] public TreeView treeView;
 
-            [NonSerialized]
-            private EditorEventRef currentEvent;
+            [NonSerialized] private EditorEventRef currentEvent;
 
-            [SerializeField]
-            private DetailsView detailsView = new DetailsView();
+            [SerializeField] private DetailsView detailsView = new DetailsView();
 
-            [SerializeField]
-            private TransportControls transportControls = new TransportControls();
+            [SerializeField] private TransportControls transportControls = new TransportControls();
 
-            [SerializeField]
-            private Event3DPreview event3DPreview = new Event3DPreview();
+            [SerializeField] private Event3DPreview event3DPreview = new Event3DPreview();
 
-            [SerializeField]
-            private PreviewMeters meters = new PreviewMeters();
+            [SerializeField] private PreviewMeters meters = new PreviewMeters();
 
-            [SerializeField]
-            private EventParameterControls parameterControls = new EventParameterControls();
+            [SerializeField] private EventParameterControls parameterControls = new EventParameterControls();
 
             private GUIStyle mainStyle;
 
             private bool isNarrow;
 
-            public bool forceRepaint { get { return transportControls.forceRepaint; } }
+            public bool forceRepaint
+            {
+                get { return transportControls.forceRepaint; }
+            }
 
             private void SetEvent(EditorEventRef eventRef)
             {
@@ -780,7 +777,7 @@ namespace FMODUnity
 
             private void AffirmResources()
             {
-                if (mainStyle ==  null)
+                if (mainStyle == null)
                 {
                     mainStyle = new GUIStyle(GUI.skin.box);
                     mainStyle.margin = new RectOffset();
@@ -916,7 +913,10 @@ namespace FMODUnity
                 DrawTextField("Oneshot", selectedEvent.IsOneShot.ToString());
 
                 TimeSpan t = TimeSpan.FromMilliseconds(selectedEvent.Length);
-                DrawTextField("Length", selectedEvent.Length > 0 ? string.Format("{0:D2}:{1:D2}:{2:D3}", t.Minutes, t.Seconds, t.Milliseconds) : "N/A");
+                DrawTextField("Length",
+                    selectedEvent.Length > 0
+                        ? string.Format("{0:D2}:{1:D2}:{2:D3}", t.Minutes, t.Seconds, t.Milliseconds)
+                        : "N/A");
 
                 if (!isNarrow) DrawTextField("Streaming", selectedEvent.IsStream.ToString());
                 EditorGUILayout.EndHorizontal();
@@ -978,6 +978,7 @@ namespace FMODUnity
                 {
                     EditorGUIUtility.systemCopyBuffer = value;
                 }
+
                 EditorGUILayout.EndHorizontal();
             }
 
@@ -1053,11 +1054,13 @@ namespace FMODUnity
                         PreviewEventInstance.release();
                         PreviewEventInstance.clearHandle();
                     }
+
                     if (playing)
                     {
                         EditorUtils.PreviewPause(PreviewEventInstance);
                     }
                 }
+
                 if (GUILayout.Button(playing ? playOn : playOff, buttonStyle, GUILayout.ExpandWidth(false)))
                 {
                     if (paused)
@@ -1070,14 +1073,18 @@ namespace FMODUnity
                         {
                             EditorUtils.PreviewStop(PreviewEventInstance);
                         }
+
                         PreviewEventInstance = EditorUtils.PreviewEvent(selectedEvent, parameterValues);
                     }
 
                     forceRepaint = true;
                 }
-                if (GUILayout.Button(new GUIContent(openIcon, "Show Event in FMOD Studio"), buttonStyle, GUILayout.ExpandWidth(false)))
+
+                if (GUILayout.Button(new GUIContent(openIcon, "Show Event in FMOD Studio"), buttonStyle,
+                        GUILayout.ExpandWidth(false)))
                 {
-                    string cmd = string.Format("studio.window.navigateTo(studio.project.lookup(\"{0}\"))", selectedEvent.Guid);
+                    string cmd = string.Format("studio.window.navigateTo(studio.project.lookup(\"{0}\"))",
+                        selectedEvent.Guid);
                     EditorUtils.SendScriptCommand(cmd);
                 }
 
@@ -1132,7 +1139,7 @@ namespace FMODUnity
                 {
                     GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
                 }
-                
+
                 GUILayout.Label(arena, GUILayout.ExpandWidth(false));
 
                 if (Event.current.type == EventType.Repaint)
@@ -1158,6 +1165,7 @@ namespace FMODUnity
                                 isDragging = true;
                                 useGUIEvent = true;
                             }
+
                             break;
                         case EventType.MouseUp:
                             if (isDragging)
@@ -1165,12 +1173,14 @@ namespace FMODUnity
                                 isDragging = false;
                                 useGUIEvent = true;
                             }
+
                             break;
                         case EventType.MouseDrag:
                             if (isDragging)
                             {
                                 useGUIEvent = true;
                             }
+
                             break;
                     }
 
@@ -1209,16 +1219,16 @@ namespace FMODUnity
         [Serializable]
         private class EventParameterControls
         {
-            [NonSerialized]
-            private Dictionary<string, float> parameterValues = new Dictionary<string, float>();
+            [NonSerialized] private Dictionary<string, float> parameterValues = new Dictionary<string, float>();
 
-            [NonSerialized]
-            private Vector2 scrollPosition;
+            [NonSerialized] private Vector2 scrollPosition;
 
-            [NonSerialized]
-            private bool showGlobalParameters;
+            [NonSerialized] private bool showGlobalParameters;
 
-            public Dictionary<string, float> ParameterValues { get { return parameterValues; } }
+            public Dictionary<string, float> ParameterValues
+            {
+                get { return parameterValues; }
+            }
 
             public void Reset()
             {
@@ -1241,7 +1251,8 @@ namespace FMODUnity
                 }
 
                 showGlobalParameters = selectedEvent.GlobalParameters.Count > 0 &&
-                    EditorGUI.Foldout(EditorGUILayout.GetControlRect(), showGlobalParameters, "Global Parameters");
+                                       EditorGUI.Foldout(EditorGUILayout.GetControlRect(), showGlobalParameters,
+                                           "Global Parameters");
 
                 foreach (EditorParamRef paramRef in selectedEvent.GlobalParameters)
                 {
@@ -1312,8 +1323,9 @@ namespace FMODUnity
 
                 int meterHeight = minimized ? 86 : 128;
                 int meterWidth = (int)((128 / (float)meterOff.height) * meterOff.width);
-                
-                List<float> meterPositions = meterPositionsForSpeakerMode(speakerModeForChannelCount(metering.Length), meterWidth, 2, 6);
+
+                List<float> meterPositions =
+                    meterPositionsForSpeakerMode(speakerModeForChannelCount(metering.Length), meterWidth, 2, 6);
 
                 const int MeterCountMaximum = 16;
 
@@ -1324,27 +1336,32 @@ namespace FMODUnity
 
                 float baseX = fullRect.x + (fullRect.width - (meterWidth * metering.Length)) / 2;
 
-                for(int i = 0; i < metering.Length; i++)
+                for (int i = 0; i < metering.Length; i++)
                 {
                     Rect meterRect = new Rect(baseX + meterPositions[i], fullRect.y, meterWidth, fullRect.height);
 
                     GUI.DrawTexture(meterRect, meterOff);
-                    
+
                     float db = 20.0f * Mathf.Log10(metering[i] * Mathf.Sqrt(2.0f));
                     db = Mathf.Clamp(db, -80.0f, 10.0f);
                     float visible = 0;
                     int[] segmentPixels = new int[] { 0, 18, 38, 60, 89, 130, 187, 244, 300 };
-                    float[] segmentDB = new float[] { -80.0f, -60.0f, -50.0f, -40.0f, -30.0f, -20.0f, -10.0f, 0, 10.0f };
+                    float[] segmentDB = new float[]
+                        { -80.0f, -60.0f, -50.0f, -40.0f, -30.0f, -20.0f, -10.0f, 0, 10.0f };
                     int segment = 1;
                     while (segmentDB[segment] < db)
                     {
                         segment++;
                     }
-                    visible = segmentPixels[segment - 1] + ((db - segmentDB[segment - 1]) / (segmentDB[segment] - segmentDB[segment - 1])) * (segmentPixels[segment] - segmentPixels[segment - 1]);
+
+                    visible = segmentPixels[segment - 1] +
+                              ((db - segmentDB[segment - 1]) / (segmentDB[segment] - segmentDB[segment - 1])) *
+                              (segmentPixels[segment] - segmentPixels[segment - 1]);
 
                     visible *= fullRect.height / (float)meterOff.height;
 
-                    Rect levelPosRect = new Rect(meterRect.x, fullRect.height - visible + meterRect.y, meterWidth, visible);
+                    Rect levelPosRect = new Rect(meterRect.x, fullRect.height - visible + meterRect.y, meterWidth,
+                        visible);
                     Rect levelUVRect = new Rect(0, 0, 1.0f, visible / fullRect.height);
                     GUI.DrawTextureWithTexCoords(levelPosRect, meterOn, levelUVRect);
                 }
@@ -1352,193 +1369,201 @@ namespace FMODUnity
 
             private FMOD.SPEAKERMODE speakerModeForChannelCount(int channelCount)
             {
-                switch(channelCount)
+                switch (channelCount)
                 {
-                case 1:
-                    return FMOD.SPEAKERMODE.MONO;
-                case 4:
-                    return FMOD.SPEAKERMODE.QUAD;
-                case 5:
-                    return FMOD.SPEAKERMODE.SURROUND;
-                case 6:
-                    return FMOD.SPEAKERMODE._5POINT1;
-                case 8:
-                    return FMOD.SPEAKERMODE._7POINT1;
-                case 12:
-                    return FMOD.SPEAKERMODE._7POINT1POINT4;
-                default:
-                    return FMOD.SPEAKERMODE.STEREO;
+                    case 1:
+                        return FMOD.SPEAKERMODE.MONO;
+                    case 4:
+                        return FMOD.SPEAKERMODE.QUAD;
+                    case 5:
+                        return FMOD.SPEAKERMODE.SURROUND;
+                    case 6:
+                        return FMOD.SPEAKERMODE._5POINT1;
+                    case 8:
+                        return FMOD.SPEAKERMODE._7POINT1;
+                    case 12:
+                        return FMOD.SPEAKERMODE._7POINT1POINT4;
+                    default:
+                        return FMOD.SPEAKERMODE.STEREO;
                 }
             }
 
-            private List<float> meterPositionsForSpeakerMode(FMOD.SPEAKERMODE mode, float meterWidth, float groupGap, float lfeGap)
+            private List<float> meterPositionsForSpeakerMode(FMOD.SPEAKERMODE mode, float meterWidth, float groupGap,
+                float lfeGap)
             {
                 List<float> offsets = new List<float>();
 
-                switch(mode)
+                switch (mode)
                 {
-                case FMOD.SPEAKERMODE.MONO: // M
-                    offsets.Add(0);
-                    break;
+                    case FMOD.SPEAKERMODE.MONO: // M
+                        offsets.Add(0);
+                        break;
 
-                case FMOD.SPEAKERMODE.STEREO: // L R
-                    offsets.Add(0);
-                    offsets.Add(meterWidth);
-                    break;
+                    case FMOD.SPEAKERMODE.STEREO: // L R
+                        offsets.Add(0);
+                        offsets.Add(meterWidth);
+                        break;
 
-                case FMOD.SPEAKERMODE.QUAD:
-                    switch(Settings.Instance.MeterChannelOrdering)
-                    {
-                    case MeterChannelOrderingType.Standard:
-                    case MeterChannelOrderingType.SeparateLFE: // L R | LS RS
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // LS
-                        offsets.Add(meterWidth*3 + groupGap); // RS
-                        break;
-                    case MeterChannelOrderingType.Positional: // LS | L R | RS
-                        offsets.Add(meterWidth*1 + groupGap); // L
-                        offsets.Add(meterWidth*2 + groupGap); // R
-                        offsets.Add(0); // LS
-                        offsets.Add(meterWidth*3 + groupGap*2); // RS
-                        break;
-                    }
-                    break;
+                    case FMOD.SPEAKERMODE.QUAD:
+                        switch (Settings.Instance.MeterChannelOrdering)
+                        {
+                            case MeterChannelOrderingType.Standard:
+                            case MeterChannelOrderingType.SeparateLFE: // L R | LS RS
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // LS
+                                offsets.Add(meterWidth * 3 + groupGap); // RS
+                                break;
+                            case MeterChannelOrderingType.Positional: // LS | L R | RS
+                                offsets.Add(meterWidth * 1 + groupGap); // L
+                                offsets.Add(meterWidth * 2 + groupGap); // R
+                                offsets.Add(0); // LS
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // RS
+                                break;
+                        }
 
-                case FMOD.SPEAKERMODE.SURROUND:
-                    switch(Settings.Instance.MeterChannelOrdering)
-                    {
-                    case MeterChannelOrderingType.Standard:
-                    case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*3 + groupGap*2); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
                         break;
-                    case MeterChannelOrderingType.Positional: // LS | L C R | RS
-                        offsets.Add(meterWidth*1 + groupGap); // L
-                        offsets.Add(meterWidth*3 + groupGap); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(0); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
-                        break;
-                    }
-                    break;
 
-                case FMOD.SPEAKERMODE._5POINT1:
-                    switch(Settings.Instance.MeterChannelOrdering)
-                    {
-                    case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*3 + groupGap*2); // LFE
-                        offsets.Add(meterWidth*4 + groupGap*3); // LS
-                        offsets.Add(meterWidth*5 + groupGap*3); // RS
-                        break;
-                    case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS || LFE
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*5 + groupGap*2 + lfeGap); // LFE
-                        offsets.Add(meterWidth*3 + groupGap*2); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
-                        break;
-                    case MeterChannelOrderingType.Positional: // LS | L C R | RS || LFE
-                        offsets.Add(meterWidth*1 + groupGap); // L
-                        offsets.Add(meterWidth*3 + groupGap); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*5 + groupGap*2 + lfeGap); // LFE
-                        offsets.Add(0); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
-                        break;
-                    }
-                    break;
+                    case FMOD.SPEAKERMODE.SURROUND:
+                        switch (Settings.Instance.MeterChannelOrdering)
+                        {
+                            case MeterChannelOrderingType.Standard:
+                            case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                break;
+                            case MeterChannelOrderingType.Positional: // LS | L C R | RS
+                                offsets.Add(meterWidth * 1 + groupGap); // L
+                                offsets.Add(meterWidth * 3 + groupGap); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(0); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                break;
+                        }
 
-                case FMOD.SPEAKERMODE._7POINT1:
-                    switch(Settings.Instance.MeterChannelOrdering)
-                    {
-                    case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS | LSR RSR
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*3 + groupGap*2); // LFE
-                        offsets.Add(meterWidth*4 + groupGap*3); // LS
-                        offsets.Add(meterWidth*5 + groupGap*3); // RS
-                        offsets.Add(meterWidth*6 + groupGap*4); // LSR
-                        offsets.Add(meterWidth*7 + groupGap*4); // RSR
                         break;
-                    case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS | LSR RSR || LFE
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*7 + groupGap*3 + lfeGap); // LFE
-                        offsets.Add(meterWidth*3 + groupGap*2); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
-                        offsets.Add(meterWidth*5 + groupGap*3); // LSR
-                        offsets.Add(meterWidth*6 + groupGap*3); // RSR
-                        break;
-                    case MeterChannelOrderingType.Positional: // LSR LS | L C R | RS RSR || LFE
-                        offsets.Add(meterWidth*2 + groupGap); // L
-                        offsets.Add(meterWidth*4 + groupGap); // R
-                        offsets.Add(meterWidth*3 + groupGap); // C
-                        offsets.Add(meterWidth*7 + groupGap*2 + lfeGap); // LFE
-                        offsets.Add(meterWidth*1); // LS
-                        offsets.Add(meterWidth*5 + groupGap*2); // RS
-                        offsets.Add(0); // LSR
-                        offsets.Add(meterWidth*6 + groupGap*2); // RSR
-                        break;
-                    }
-                    break;
 
-                case FMOD.SPEAKERMODE._7POINT1POINT4:
-                    switch(Settings.Instance.MeterChannelOrdering)
-                    {
-                    case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS | LSR RSR | TFL TFR TBL TBR
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*3 + groupGap*2); // LFE
-                        offsets.Add(meterWidth*4 + groupGap*3); // LS
-                        offsets.Add(meterWidth*5 + groupGap*3); // RS
-                        offsets.Add(meterWidth*6 + groupGap*4); // LSR
-                        offsets.Add(meterWidth*7 + groupGap*4); // RSR
-                        offsets.Add(meterWidth*8 + groupGap*5); // TFL
-                        offsets.Add(meterWidth*9 + groupGap*5); // TFR
-                        offsets.Add(meterWidth*10 + groupGap*5); // TBL
-                        offsets.Add(meterWidth*11 + groupGap*5); // TBR
+                    case FMOD.SPEAKERMODE._5POINT1:
+                        switch (Settings.Instance.MeterChannelOrdering)
+                        {
+                            case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LFE
+                                offsets.Add(meterWidth * 4 + groupGap * 3); // LS
+                                offsets.Add(meterWidth * 5 + groupGap * 3); // RS
+                                break;
+                            case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS || LFE
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 5 + groupGap * 2 + lfeGap); // LFE
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                break;
+                            case MeterChannelOrderingType.Positional: // LS | L C R | RS || LFE
+                                offsets.Add(meterWidth * 1 + groupGap); // L
+                                offsets.Add(meterWidth * 3 + groupGap); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 5 + groupGap * 2 + lfeGap); // LFE
+                                offsets.Add(0); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                break;
+                        }
+
                         break;
-                    case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS | LSR RSR | TFL TFR TBL TBR || LFE
-                        offsets.Add(0); // L
-                        offsets.Add(meterWidth*1); // R
-                        offsets.Add(meterWidth*2 + groupGap); // C
-                        offsets.Add(meterWidth*11 + groupGap*4 + lfeGap); // LFE
-                        offsets.Add(meterWidth*3 + groupGap*2); // LS
-                        offsets.Add(meterWidth*4 + groupGap*2); // RS
-                        offsets.Add(meterWidth*5 + groupGap*3); // LSR
-                        offsets.Add(meterWidth*6 + groupGap*3); // RSR
-                        offsets.Add(meterWidth*7 + groupGap*4); // TFL
-                        offsets.Add(meterWidth*8 + groupGap*4); // TFR
-                        offsets.Add(meterWidth*9 + groupGap*4); // TBL
-                        offsets.Add(meterWidth*10 + groupGap*4); // TBR
+
+                    case FMOD.SPEAKERMODE._7POINT1:
+                        switch (Settings.Instance.MeterChannelOrdering)
+                        {
+                            case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS | LSR RSR
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LFE
+                                offsets.Add(meterWidth * 4 + groupGap * 3); // LS
+                                offsets.Add(meterWidth * 5 + groupGap * 3); // RS
+                                offsets.Add(meterWidth * 6 + groupGap * 4); // LSR
+                                offsets.Add(meterWidth * 7 + groupGap * 4); // RSR
+                                break;
+                            case MeterChannelOrderingType.SeparateLFE: // L R | C | LS RS | LSR RSR || LFE
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 7 + groupGap * 3 + lfeGap); // LFE
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                offsets.Add(meterWidth * 5 + groupGap * 3); // LSR
+                                offsets.Add(meterWidth * 6 + groupGap * 3); // RSR
+                                break;
+                            case MeterChannelOrderingType.Positional: // LSR LS | L C R | RS RSR || LFE
+                                offsets.Add(meterWidth * 2 + groupGap); // L
+                                offsets.Add(meterWidth * 4 + groupGap); // R
+                                offsets.Add(meterWidth * 3 + groupGap); // C
+                                offsets.Add(meterWidth * 7 + groupGap * 2 + lfeGap); // LFE
+                                offsets.Add(meterWidth * 1); // LS
+                                offsets.Add(meterWidth * 5 + groupGap * 2); // RS
+                                offsets.Add(0); // LSR
+                                offsets.Add(meterWidth * 6 + groupGap * 2); // RSR
+                                break;
+                        }
+
                         break;
-                    case MeterChannelOrderingType.Positional: // LSR LS | L C R | RS RSR | TBL TFL TFR TBR || LFE
-                        offsets.Add(meterWidth*2 + groupGap); // L
-                        offsets.Add(meterWidth*4 + groupGap); // R
-                        offsets.Add(meterWidth*3 + groupGap); // C
-                        offsets.Add(meterWidth*11 + groupGap*3 + lfeGap); // LFE
-                        offsets.Add(meterWidth*1); // LS
-                        offsets.Add(meterWidth*5 + groupGap*2); // RS
-                        offsets.Add(0); // LSR
-                        offsets.Add(meterWidth*6 + groupGap*2); // RSR
-                        offsets.Add(meterWidth*8 + groupGap*3); // TFL
-                        offsets.Add(meterWidth*9 + groupGap*3); // TFR
-                        offsets.Add(meterWidth*7 + groupGap*3); // TBL
-                        offsets.Add(meterWidth*10 + groupGap*3); // TBR
+
+                    case FMOD.SPEAKERMODE._7POINT1POINT4:
+                        switch (Settings.Instance.MeterChannelOrdering)
+                        {
+                            case MeterChannelOrderingType.Standard: // L R | C | LFE | LS RS | LSR RSR | TFL TFR TBL TBR
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LFE
+                                offsets.Add(meterWidth * 4 + groupGap * 3); // LS
+                                offsets.Add(meterWidth * 5 + groupGap * 3); // RS
+                                offsets.Add(meterWidth * 6 + groupGap * 4); // LSR
+                                offsets.Add(meterWidth * 7 + groupGap * 4); // RSR
+                                offsets.Add(meterWidth * 8 + groupGap * 5); // TFL
+                                offsets.Add(meterWidth * 9 + groupGap * 5); // TFR
+                                offsets.Add(meterWidth * 10 + groupGap * 5); // TBL
+                                offsets.Add(meterWidth * 11 + groupGap * 5); // TBR
+                                break;
+                            case MeterChannelOrderingType.SeparateLFE
+                                : // L R | C | LS RS | LSR RSR | TFL TFR TBL TBR || LFE
+                                offsets.Add(0); // L
+                                offsets.Add(meterWidth * 1); // R
+                                offsets.Add(meterWidth * 2 + groupGap); // C
+                                offsets.Add(meterWidth * 11 + groupGap * 4 + lfeGap); // LFE
+                                offsets.Add(meterWidth * 3 + groupGap * 2); // LS
+                                offsets.Add(meterWidth * 4 + groupGap * 2); // RS
+                                offsets.Add(meterWidth * 5 + groupGap * 3); // LSR
+                                offsets.Add(meterWidth * 6 + groupGap * 3); // RSR
+                                offsets.Add(meterWidth * 7 + groupGap * 4); // TFL
+                                offsets.Add(meterWidth * 8 + groupGap * 4); // TFR
+                                offsets.Add(meterWidth * 9 + groupGap * 4); // TBL
+                                offsets.Add(meterWidth * 10 + groupGap * 4); // TBR
+                                break;
+                            case MeterChannelOrderingType.Positional
+                                : // LSR LS | L C R | RS RSR | TBL TFL TFR TBR || LFE
+                                offsets.Add(meterWidth * 2 + groupGap); // L
+                                offsets.Add(meterWidth * 4 + groupGap); // R
+                                offsets.Add(meterWidth * 3 + groupGap); // C
+                                offsets.Add(meterWidth * 11 + groupGap * 3 + lfeGap); // LFE
+                                offsets.Add(meterWidth * 1); // LS
+                                offsets.Add(meterWidth * 5 + groupGap * 2); // RS
+                                offsets.Add(0); // LSR
+                                offsets.Add(meterWidth * 6 + groupGap * 2); // RSR
+                                offsets.Add(meterWidth * 8 + groupGap * 3); // TFL
+                                offsets.Add(meterWidth * 9 + groupGap * 3); // TFR
+                                offsets.Add(meterWidth * 7 + groupGap * 3); // TBL
+                                offsets.Add(meterWidth * 10 + groupGap * 3); // TBR
+                                break;
+                        }
+
                         break;
-                    }
-                    break;
                 }
 
                 return offsets;
@@ -1765,7 +1790,7 @@ namespace FMODUnity
             {
                 DragAndDrop.visualMode = DragAndDropVisualMode.Move;
                 DragAndDrop.AcceptDrag();
-                Event.current.Use(); 
+                Event.current.Use();
             }
         }
     }

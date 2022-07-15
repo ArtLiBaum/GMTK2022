@@ -22,7 +22,9 @@ namespace FMODUnity
             targetEmitter = null;
             for (int i = 0; i < emitters.arraySize; i++)
             {
-                targetEmitter = emitters.GetArrayElementAtIndex(i).FindPropertyRelative("Target").objectReferenceValue as StudioEventEmitter;
+                targetEmitter =
+                    emitters.GetArrayElementAtIndex(i).FindPropertyRelative("Target").objectReferenceValue as
+                        StudioEventEmitter;
                 if (targetEmitter != null)
                 {
                     expanded = new bool[targetEmitter.GetComponents<StudioEventEmitter>().Length];
@@ -33,7 +35,9 @@ namespace FMODUnity
 
         public override void OnInspectorGUI()
         {
-            var newTargetEmitter = EditorGUILayout.ObjectField("Target", targetEmitter, typeof(StudioEventEmitter), true) as StudioEventEmitter;
+            var newTargetEmitter =
+                EditorGUILayout.ObjectField("Target", targetEmitter, typeof(StudioEventEmitter), true) as
+                    StudioEventEmitter;
             if (newTargetEmitter != targetEmitter)
             {
                 emitters.ClearArray();
@@ -62,7 +66,8 @@ namespace FMODUnity
 
             EditorGUILayout.PropertyField(trigger, new GUIContent("Trigger"));
 
-            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter && trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
+            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter &&
+                trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
             {
                 tag.stringValue = EditorGUILayout.TagField("Collision Tag", tag.stringValue);
             }
@@ -74,9 +79,10 @@ namespace FMODUnity
             foreach (var emitter in localEmitters)
             {
                 SerializedProperty emitterProperty = null;
-                for(int i = 0; i < emitters.arraySize; i++)
+                for (int i = 0; i < emitters.arraySize; i++)
                 {
-                    if (emitters.GetArrayElementAtIndex(i).FindPropertyRelative("Target").objectReferenceValue == emitter)
+                    if (emitters.GetArrayElementAtIndex(i).FindPropertyRelative("Target").objectReferenceValue ==
+                        emitter)
                     {
                         emitterProperty = emitters.GetArrayElementAtIndex(i);
                         break;
@@ -93,7 +99,8 @@ namespace FMODUnity
 
                 if (!emitter.EventReference.IsNull)
                 {
-                    expanded[emitterIndex] = EditorGUILayout.Foldout(expanded[emitterIndex], emitter.EventReference.Path);
+                    expanded[emitterIndex] =
+                        EditorGUILayout.Foldout(expanded[emitterIndex], emitter.EventReference.Path);
                     if (expanded[emitterIndex])
                     {
                         var eventRef = EventManager.EventFromGUID(emitter.EventReference.Guid);
@@ -104,13 +111,15 @@ namespace FMODUnity
                             int index = -1;
                             for (int i = 0; i < emitterProperty.FindPropertyRelative("Params").arraySize; i++)
                             {
-                                if (emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue == paramRef.Name)
+                                if (emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(i)
+                                        .FindPropertyRelative("Name").stringValue == paramRef.Name)
                                 {
                                     index = i;
                                     set = true;
                                     break;
                                 }
                             }
+
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.PrefixLabel(paramRef.Name);
                             bool newSet = GUILayout.Toggle(set, "");
@@ -118,13 +127,17 @@ namespace FMODUnity
                             {
                                 index = 0;
                                 emitterProperty.FindPropertyRelative("Params").InsertArrayElementAtIndex(0);
-                                emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(0).FindPropertyRelative("Name").stringValue = paramRef.Name;
-                                emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(0).FindPropertyRelative("Value").floatValue = 0;
+                                emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(0)
+                                    .FindPropertyRelative("Name").stringValue = paramRef.Name;
+                                emitterProperty.FindPropertyRelative("Params").GetArrayElementAtIndex(0)
+                                    .FindPropertyRelative("Value").floatValue = 0;
                             }
+
                             if (set && !newSet)
                             {
                                 emitterProperty.FindPropertyRelative("Params").DeleteArrayElementAtIndex(index);
                             }
+
                             set = newSet;
 
                             if (set)
@@ -141,12 +154,15 @@ namespace FMODUnity
                                     EditorUtils.DrawParameterValueLayout(0, paramRef);
                                 }
                             }
+
                             EditorGUILayout.EndHorizontal();
                         }
                     }
                 }
+
                 emitterIndex++;
             }
+
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -17,7 +17,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformMobileLow>("c88d16e5272a4e241b0ef0ac2e53b73d");
         }
 
-        public override string DisplayName { get { return "Low-End Mobile"; } }
+        public override string DisplayName
+        {
+            get { return "Low-End Mobile"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.IPhonePlayer, this);
@@ -30,14 +34,18 @@ namespace FMODUnity
             yield break;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.MobileLow; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.MobileLow; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return null;
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield break;
         }
@@ -55,14 +63,14 @@ namespace FMODUnity
         }
 #endif
 
-        public override float Priority { get { return DefaultPriority + 1; } }
+        public override float Priority
+        {
+            get { return DefaultPriority + 1; }
+        }
 
         public override bool MatchesCurrentEnvironment
         {
-            get
-            {
-                return Active;
-            }
+            get { return Active; }
         }
 
 #if UNITY_IOS
@@ -83,7 +91,10 @@ namespace FMODUnity
 #endif
 
 #if UNITY_EDITOR
-        public override OutputType[] ValidOutputTypes { get { return null; } }
+        public override OutputType[] ValidOutputTypes
+        {
+            get { return null; }
+        }
 #endif
     }
 }

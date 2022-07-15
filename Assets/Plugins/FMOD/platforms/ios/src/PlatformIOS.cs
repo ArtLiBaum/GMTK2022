@@ -36,7 +36,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformIOS>("0f8eb3f400726694eb47beb1a9f94ce8");
         }
 
-        public override string DisplayName { get { return "iOS"; } }
+        public override string DisplayName
+        {
+            get { return "iOS"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.IPhonePlayer, this);
@@ -48,14 +52,18 @@ namespace FMODUnity
             yield return BuildTarget.iOS;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.iOS; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.iOS; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("ios", "Plugins/iOS");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             if (allVariants || PlayerSettings.iOS.sdkVersion == iOSSdkVersion.DeviceSDK)
             {
@@ -82,7 +90,10 @@ namespace FMODUnity
             }
         }
 
-        public override bool IsFMODStaticallyLinked { get { return true; } }
+        public override bool IsFMODStaticallyLinked
+        {
+            get { return true; }
+        }
 
         public override bool SupportsAdditionalCPP(BuildTarget target)
         {
@@ -104,20 +115,17 @@ namespace FMODUnity
             Action<FMOD.RESULT, string> reportResult)
         {
             platform.LoadStaticPlugins(coreSystem, reportResult);
-
         }
 
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
         };
 #endif
     }

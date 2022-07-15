@@ -12,30 +12,23 @@ namespace FMODUnity
     [System.Serializable]
     public class FMODEventPlayable : PlayableAsset, ITimelineClipAsset
     {
-        [FormerlySerializedAs("template")]
-        public FMODEventPlayableBehavior Template = new FMODEventPlayableBehavior();
+        [FormerlySerializedAs("template")] public FMODEventPlayableBehavior Template = new FMODEventPlayableBehavior();
 
-        [FormerlySerializedAs("eventLength")]
-        public float EventLength; //In seconds.
+        [FormerlySerializedAs("eventLength")] public float EventLength; //In seconds.
 
-        [Obsolete("Use the eventReference field instead")]
-        [SerializeField]
+        [Obsolete("Use the eventReference field instead")] [SerializeField]
         public string eventName;
 
-        [FormerlySerializedAs("eventReference")]
-        [SerializeField]
+        [FormerlySerializedAs("eventReference")] [SerializeField]
         public EventReference EventReference;
 
-        [FormerlySerializedAs("stopType")]
-        [SerializeField]
+        [FormerlySerializedAs("stopType")] [SerializeField]
         public STOP_MODE StopType;
 
-        [FormerlySerializedAs("parameters")]
-        [SerializeField]
+        [FormerlySerializedAs("parameters")] [SerializeField]
         public ParamRef[] Parameters = new ParamRef[0];
 
-        [NonSerialized]
-        public bool CachedParameters = false;
+        [NonSerialized] public bool CachedParameters = false;
 
         private FMODEventPlayableBehavior behavior;
 
@@ -124,6 +117,7 @@ namespace FMODUnity
                     OwningClip.displayName = EventReference.Path.Substring(index + 1);
                 }
             }
+
             if (behavior != null)
             {
                 behavior.EventReference = EventReference;
@@ -167,21 +161,17 @@ namespace FMODUnity
         [FormerlySerializedAs("eventReference")]
         public EventReference EventReference;
 
-        [FormerlySerializedAs("stopType")]
-        public STOP_MODE StopType = STOP_MODE.AllowFadeout;
+        [FormerlySerializedAs("stopType")] public STOP_MODE StopType = STOP_MODE.AllowFadeout;
 
-        [FormerlySerializedAs("parameters")]
-        [NotKeyable]
+        [FormerlySerializedAs("parameters")] [NotKeyable]
         public ParamRef[] Parameters = new ParamRef[0];
 
         [FormerlySerializedAs("parameterLinks")]
         public List<ParameterAutomationLink> ParameterLinks = new List<ParameterAutomationLink>();
 
-        [NonSerialized]
-        public GameObject TrackTargetObject;
+        [NonSerialized] public GameObject TrackTargetObject;
 
-        [NonSerialized]
-        public TimelineClip OwningClip;
+        [NonSerialized] public TimelineClip OwningClip;
 
         [FormerlySerializedAs("parameterAutomation")]
         public AutomatableSlots ParameterAutomation;
@@ -204,14 +194,16 @@ namespace FMODUnity
 #if UNITY_PHYSICS_EXIST
                     if (TrackTargetObject.GetComponent<Rigidbody>())
                     {
-                        RuntimeManager.AttachInstanceToGameObject(eventInstance, TrackTargetObject.transform, TrackTargetObject.GetComponent<Rigidbody>());
+                        RuntimeManager.AttachInstanceToGameObject(eventInstance, TrackTargetObject.transform,
+                            TrackTargetObject.GetComponent<Rigidbody>());
                     }
                     else
 #endif
 #if UNITY_PHYSICS2D_EXIST
                     if (TrackTargetObject.GetComponent<Rigidbody2D>())
                     {
-                        RuntimeManager.AttachInstanceToGameObject(eventInstance, TrackTargetObject.transform, TrackTargetObject.GetComponent<Rigidbody2D>());
+                        RuntimeManager.AttachInstanceToGameObject(eventInstance, TrackTargetObject.transform,
+                            TrackTargetObject.GetComponent<Rigidbody2D>());
                     }
                     else
 #endif
@@ -266,8 +258,11 @@ namespace FMODUnity
                     {
                         if (StopType != STOP_MODE.None)
                         {
-                            eventInstance.stop(StopType == STOP_MODE.Immediate ? FMOD.Studio.STOP_MODE.IMMEDIATE : FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                            eventInstance.stop(StopType == STOP_MODE.Immediate
+                                ? FMOD.Studio.STOP_MODE.IMMEDIATE
+                                : FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                         }
+
                         eventInstance.release();
                         eventInstance.clearHandle();
                     }

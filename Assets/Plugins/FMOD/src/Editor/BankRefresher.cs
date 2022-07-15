@@ -66,7 +66,8 @@ namespace FMODUnity
             {
                 currentWatchPath = pathToWatch;
 
-                try {
+                try
+                {
                     sourceFileWatcher.EnableRaisingEvents = false;
                     sourceFilesChanged = false;
 
@@ -134,7 +135,7 @@ namespace FMODUnity
             Settings settings = Settings.Instance;
 
             return settings.BankRefreshCooldown == Settings.BankRefreshPrompt
-                || (settings.BankRefreshCooldown >= 0 && settings.ShowBankRefreshWindow);
+                   || (settings.BankRefreshCooldown >= 0 && settings.ShowBankRefreshWindow);
         }
 
         public static float TimeSinceSourceFileChange()

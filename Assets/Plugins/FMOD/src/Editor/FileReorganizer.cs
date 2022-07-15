@@ -12,28 +12,21 @@ namespace FMODUnity
     {
         public const string ReorganizerMenuItemPath = "FMOD/Reorganize Plugin Files";
 
-        [SerializeField]
-        private List<Task> tasks = new List<Task>();
+        [SerializeField] private List<Task> tasks = new List<Task>();
 
-        [SerializeField]
-        private int taskCount;
+        [SerializeField] private int taskCount;
 
-        [SerializeField]
-        private int currentTask;
+        [SerializeField] private int currentTask;
 
         private TaskView taskView;
 
-        [SerializeField]
-        private TreeViewState taskViewState = new TreeViewState();
+        [SerializeField] private TreeViewState taskViewState = new TreeViewState();
 
-        [SerializeField]
-        private MultiColumnHeaderState taskHeaderState;
+        [SerializeField] private MultiColumnHeaderState taskHeaderState;
 
-        [SerializeField]
-        private bool reloadingFromSerializedState = false;
+        [SerializeField] private bool reloadingFromSerializedState = false;
 
-        [NonSerialized]
-        private GUIContent statusContent = GUIContent.none;
+        [NonSerialized] private GUIContent statusContent = GUIContent.none;
 
         private IEnumerator<string> processingState;
 
@@ -52,14 +45,15 @@ namespace FMODUnity
         private class Task
         {
             public int step = int.MaxValue;
-            
+
             private Task()
             {
             }
 
             public static Task Move(string source, string destination, Platform platform)
             {
-                return new Task() {
+                return new Task()
+                {
                     type = Type.Move,
                     status = Status.Pending,
                     platform = platform,
@@ -71,7 +65,8 @@ namespace FMODUnity
 
             public static Task RemoveFolder(string path)
             {
-                return new Task() {
+                return new Task()
+                {
                     type = Type.RemoveFolder,
                     status = Status.Pending,
                     source = path,
@@ -81,7 +76,8 @@ namespace FMODUnity
 
             public static Task Missing(string path, Platform platform)
             {
-                return new Task() {
+                return new Task()
+                {
                     type = Type.Missing,
                     status = Status.Missing,
                     platform = platform,
@@ -94,7 +90,8 @@ namespace FMODUnity
 
             public static Task RemoveAsset(string path, Platform platform)
             {
-                return new Task() {
+                return new Task()
+                {
                     type = Type.RemoveAsset,
                     status = Status.Pending,
                     platform = platform,
@@ -140,7 +137,10 @@ namespace FMODUnity
 
             public Type type { get; private set; }
 
-            public string platformName { get { return (platform != null) ? platform.DisplayName : string.Empty; } }
+            public string platformName
+            {
+                get { return (platform != null) ? platform.DisplayName : string.Empty; }
+            }
         }
 
         public void OnBeforeSerialize()
@@ -295,7 +295,8 @@ namespace FMODUnity
 
             public static MultiColumnHeaderState CreateHeaderState()
             {
-                MultiColumnHeaderState.Column[] columns = new MultiColumnHeaderState.Column[] {
+                MultiColumnHeaderState.Column[] columns = new MultiColumnHeaderState.Column[]
+                {
                     new MultiColumnHeaderState.Column()
                     {
                         headerContent = new GUIContent("Task #"),
@@ -310,7 +311,8 @@ namespace FMODUnity
                         autoResize = false,
                         allowToggleVisibility = false,
                     },
-                    new MultiColumnHeaderState.Column() {
+                    new MultiColumnHeaderState.Column()
+                    {
                         headerContent = new GUIContent("Platform"),
                         width = 150,
                         autoResize = false,
@@ -350,7 +352,8 @@ namespace FMODUnity
 
                     foreach (Task task in tasks)
                     {
-                        TreeViewItem taskItem = new TaskItem() {
+                        TreeViewItem taskItem = new TaskItem()
+                        {
                             id = index++,
                             task = task,
                         };
@@ -433,7 +436,8 @@ namespace FMODUnity
                 RefreshCustomRowHeights();
             }
 
-            private IOrderedEnumerable<TreeViewItem> InitialQuery(IList<TreeViewItem> rows, Column column, bool ascending)
+            private IOrderedEnumerable<TreeViewItem> InitialQuery(IList<TreeViewItem> rows, Column column,
+                bool ascending)
             {
                 switch (column)
                 {
@@ -515,6 +519,7 @@ namespace FMODUnity
                         {
                             GUI.Label(rect, task.step.ToString(), Resources.StepStyle());
                         }
+
                         break;
                     case Column.Status:
                         GUI.Label(rect, Resources.StatusContent[task.status], Resources.StatusColumnStyle());
@@ -677,20 +682,22 @@ namespace FMODUnity
             private static bool cacheInitialized = false;
 
             public static readonly Dictionary<Task.Status, Texture> StatusIcon =
-                new Dictionary<Task.Status, Texture>() {
-                {  Task.Status.Pending, EditorGUIUtility.FindTexture("TestNormal") },
-                {  Task.Status.Succeeded, EditorGUIUtility.FindTexture("TestPassed") },
-                {  Task.Status.Failed, EditorGUIUtility.FindTexture("TestFailed") },
-                {  Task.Status.Missing, EditorGUIUtility.FindTexture("console.warnicon.sml") },
-            };
+                new Dictionary<Task.Status, Texture>()
+                {
+                    { Task.Status.Pending, EditorGUIUtility.FindTexture("TestNormal") },
+                    { Task.Status.Succeeded, EditorGUIUtility.FindTexture("TestPassed") },
+                    { Task.Status.Failed, EditorGUIUtility.FindTexture("TestFailed") },
+                    { Task.Status.Missing, EditorGUIUtility.FindTexture("console.warnicon.sml") },
+                };
 
             public static readonly Dictionary<Task.Status, GUIContent> StatusContent =
-                new Dictionary<Task.Status, GUIContent>() {
-                {  Task.Status.Pending, new GUIContent("Pending", StatusIcon[Task.Status.Pending]) },
-                {  Task.Status.Succeeded, new GUIContent("Succeeded", StatusIcon[Task.Status.Succeeded]) },
-                {  Task.Status.Failed, new GUIContent("Failed", StatusIcon[Task.Status.Failed]) },
-                {  Task.Status.Missing, new GUIContent("Missing", StatusIcon[Task.Status.Missing]) },
-            };
+                new Dictionary<Task.Status, GUIContent>()
+                {
+                    { Task.Status.Pending, new GUIContent("Pending", StatusIcon[Task.Status.Pending]) },
+                    { Task.Status.Succeeded, new GUIContent("Succeeded", StatusIcon[Task.Status.Succeeded]) },
+                    { Task.Status.Failed, new GUIContent("Failed", StatusIcon[Task.Status.Failed]) },
+                    { Task.Status.Missing, new GUIContent("Missing", StatusIcon[Task.Status.Missing]) },
+                };
 
             public static GUIStyle StatusColumnStyle()
             {
@@ -758,24 +765,29 @@ namespace FMODUnity
                 {
                     cacheInitialized = true;
 
-                    statusColumnStyle = new GUIStyle(GUI.skin.label) {
+                    statusColumnStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.MiddleLeft,
                     };
 
-                    statusBarStyle = new GUIStyle(GUI.skin.label) {
+                    statusBarStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.UpperLeft,
                         wordWrap = true,
                     };
 
-                    stepStyle = new GUIStyle(GUI.skin.label) {
+                    stepStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.MiddleRight,
                     };
 
-                    prefixStyle = new GUIStyle(GUI.skin.label) {
+                    prefixStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.MiddleRight,
                     };
 
-                    suffixStyle = new GUIStyle(GUI.skin.label) {
+                    suffixStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.MiddleLeft,
                     };
 
@@ -813,7 +825,8 @@ namespace FMODUnity
             // Task list
             GUILayout.BeginVertical(GUI.skin.box);
 
-            Rect treeViewRect = GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+            Rect treeViewRect =
+                GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 
             taskView.OnGUI(treeViewRect);
 
@@ -850,7 +863,8 @@ namespace FMODUnity
             {
                 EditorGUI.BeginDisabledGroup(true);
 
-                GUILayout.Button(string.Format("Processing Task {0} of {1}", currentTask, taskCount), GUILayout.Height(buttonHeight));
+                GUILayout.Button(string.Format("Processing Task {0} of {1}", currentTask, taskCount),
+                    GUILayout.Height(buttonHeight));
 
                 EditorGUI.EndDisabledGroup();
             }
@@ -922,14 +936,16 @@ namespace FMODUnity
             private const string FMODRoot = "Assets/Plugins/FMOD";
             private const string FMODSource = FMODRoot + "/src";
 
-            private static readonly string[] BaseFolders = {
+            private static readonly string[] BaseFolders =
+            {
                 FMODSource,
                 FMODRoot,
                 "Assets/Plugins",
                 "Assets",
             };
 
-            private static readonly MoveRecord[] looseAssets = {
+            private static readonly MoveRecord[] looseAssets =
+            {
                 // Release 1.10 layout
                 new MoveRecord() { source = FMODRoot + "/fmodplugins.cpp", destination = "obsolete" },
                 new MoveRecord() { source = "Assets/GoogleVR", destination = "addons" },
@@ -941,14 +957,16 @@ namespace FMODUnity
                 new MoveRecord() { source = FMODRoot + "/src/Runtime/fmodplugins.cpp", destination = "obsolete" },
 
                 // Release 2.1 layout
-                new MoveRecord() { source = FMODRoot + "/src/Runtime/fmod_static_plugin_support.h", destination = "obsolete" },
+                new MoveRecord()
+                    { source = FMODRoot + "/src/Runtime/fmod_static_plugin_support.h", destination = "obsolete" },
 
                 // Release 2.2 layout
                 new MoveRecord() { source = FMODRoot + "/src/fmodplugins.cpp", destination = "obsolete" },
                 new MoveRecord() { source = FMODRoot + "/src/fmod_static_plugin_support.h", destination = "obsolete" },
             };
 
-            private static readonly string[] foldersToCleanUp = {
+            private static readonly string[] foldersToCleanUp =
+            {
                 "Assets/Plugins/FMOD/Runtime",
                 "Assets/Plugins/Editor",
             };
@@ -972,7 +990,8 @@ namespace FMODUnity
 
                 foreach (BuildTarget buildTarget in platform.GetBuildTargets())
                 {
-                    files = files.Concat(platform.GetBinaryFileInfo(buildTarget, Platform.BinaryType.All).Cast<Platform.FileInfo>());
+                    files = files.Concat(platform.GetBinaryFileInfo(buildTarget, Platform.BinaryType.All)
+                        .Cast<Platform.FileInfo>());
                 }
 
                 foreach (Platform.FileInfo info in files)
@@ -1015,7 +1034,7 @@ namespace FMODUnity
                         }
 
                         if (!foundPath && ((info.type & Platform.BinaryType.Optional) == 0)
-                            && !tasks.Any(t => t.source == newPath))
+                                       && !tasks.Any(t => t.source == newPath))
                         {
                             tasks.Add(Task.Missing(newPath, platform));
                         }
@@ -1031,7 +1050,7 @@ namespace FMODUnity
                 }
             }
 
-           private void AddFolderTasks(string path)
+            private void AddFolderTasks(string path)
             {
                 string baseFolder = BaseFolders.First(f => path.StartsWith(f));
 
@@ -1064,7 +1083,8 @@ namespace FMODUnity
                 public string destination;
             }
 
-            private static readonly MoveRecord[] codeFolders = {
+            private static readonly MoveRecord[] codeFolders =
+            {
                 // Release 2.0 layout
                 new MoveRecord() { source = FMODSource + "/Runtime", destination = "src" },
                 new MoveRecord() { source = FMODSource + "/Runtime/Timeline", destination = "src" },
@@ -1098,7 +1118,6 @@ namespace FMODUnity
 
                             AddMoveTask(
                                 sourcePath, $"Assets/{RuntimeUtils.PluginBasePath}/{folder.destination}/{filename}");
-
                         }
 
                         AddFolderTask(folder.source);

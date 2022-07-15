@@ -17,9 +17,15 @@ namespace FMODUnity
 
         private const float CloseDelay = 5;
 
-        public static bool IsVisible { get { return instance != null; } }
+        public static bool IsVisible
+        {
+            get { return instance != null; }
+        }
 
-        public static bool ReadyToRefreshBanks { get { return instance == null || instance.readyToRefreshBanks; } }
+        public static bool ReadyToRefreshBanks
+        {
+            get { return instance == null || instance.readyToRefreshBanks; }
+        }
 
         public static void ShowWindow()
         {
@@ -150,7 +156,8 @@ namespace FMODUnity
                 }
                 else if (timeUntilBankRefresh != float.MaxValue)
                 {
-                    if (DrawCountdown("Refreshing banks", timeUntilBankRefresh, Settings.Instance.BankRefreshCooldown, labelStyle)
+                    if (DrawCountdown("Refreshing banks", timeUntilBankRefresh, Settings.Instance.BankRefreshCooldown,
+                            labelStyle)
                         || ConsumeEscapeKey())
                     {
                         BankRefresher.DisableAutoRefresh();
@@ -187,7 +194,8 @@ namespace FMODUnity
 
         private static bool DrawCountdown(string text, float remainingTime, float totalTime, GUIStyle labelStyle)
         {
-            GUILayout.Label(string.Format("{0} in {1}...", text, EditorUtils.DurationString(remainingTime)), labelStyle);
+            GUILayout.Label(string.Format("{0} in {1}...", text, EditorUtils.DurationString(remainingTime)),
+                labelStyle);
 
             const float boxHeight = 2;
 

@@ -8,6 +8,7 @@ using UnityEditor;
 
 #if (UNITY_VISUALSCRIPTING_EXIST)
 using Unity.VisualScripting;
+
 #elif (UNITY_BOLT_EXIST)
 using Ludiq;
 using Bolt;
@@ -65,8 +66,10 @@ namespace FMODUnity
         private static void BuildBoltUnitOptions()
         {
 #if (UNITY_BOLT_EXIST)
-            DictionaryAsset projectSettings = AssetDatabase.LoadAssetAtPath(PathUtility.FromProject(LudiqCore.Paths.projectSettings), typeof(DictionaryAsset)) as DictionaryAsset;
-            List<LooseAssemblyName> assemblyOptions = projectSettings.dictionary["assemblyOptions"] as List<LooseAssemblyName>;
+            DictionaryAsset projectSettings =
+ AssetDatabase.LoadAssetAtPath(PathUtility.FromProject(LudiqCore.Paths.projectSettings), typeof(DictionaryAsset)) as DictionaryAsset;
+            List<LooseAssemblyName> assemblyOptions =
+ projectSettings.dictionary["assemblyOptions"] as List<LooseAssemblyName>;
 #else
             List<LooseAssemblyName> assemblyOptions = BoltCore.Configuration.assemblyOptions;
 #endif
@@ -110,7 +113,7 @@ namespace FMODUnity
         private static IEnumerable<Type> GetTypesForNamespace(Assembly assembly, string requestedNamespace)
         {
             return assembly.GetTypes()
-                    .Where(t => string.Equals(t.Namespace, requestedNamespace, StringComparison.Ordinal));
+                .Where(t => string.Equals(t.Namespace, requestedNamespace, StringComparison.Ordinal));
         }
 #endif
 

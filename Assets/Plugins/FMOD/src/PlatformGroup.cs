@@ -8,21 +8,28 @@ namespace FMODUnity
 {
     public class PlatformGroup : Platform
     {
-        [SerializeField]
-        private string displayName;
+        [SerializeField] private string displayName;
 
-        [SerializeField]
-        private Legacy.Platform legacyIdentifier;
+        [SerializeField] private Legacy.Platform legacyIdentifier;
 
-        public override string DisplayName { get { return displayName; } }
-        public override void DeclareRuntimePlatforms(Settings settings) { }
+        public override string DisplayName
+        {
+            get { return displayName; }
+        }
+
+        public override void DeclareRuntimePlatforms(Settings settings)
+        {
+        }
 #if UNITY_EDITOR
         public override IEnumerable<BuildTarget> GetBuildTargets()
         {
             yield break;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return legacyIdentifier; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return legacyIdentifier; }
+        }
 
         public static PlatformGroup Create(string displayName, Legacy.Platform legacyIdentifier)
         {
@@ -40,12 +47,16 @@ namespace FMODUnity
             return null;
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield break;
         }
 
-        public override OutputType[] ValidOutputTypes { get { return null; } }
+        public override OutputType[] ValidOutputTypes
+        {
+            get { return null; }
+        }
 #endif
     }
 }

@@ -35,7 +35,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformAndroid>("2fea114e74ecf3c4f920e1d5cc1c4c40");
         }
 
-        public override string DisplayName { get { return "Android"; } }
+        public override string DisplayName
+        {
+            get { return "Android"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.Android, this);
@@ -47,7 +51,10 @@ namespace FMODUnity
             yield return BuildTarget.Android;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Android; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.Android; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
@@ -56,7 +63,8 @@ namespace FMODUnity
 
         private static readonly string[] Architectures = { "arm64-v8a", "armeabi-v7a", "x86" };
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield return new FileRecord("fmod.jar")
                 .WithAbsoluteVersion(FileLayout.Release_1_10, "Plugins/Android/fmod.jar");
@@ -108,19 +116,20 @@ namespace FMODUnity
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Java Audio Track", outputType = FMOD.OUTPUTTYPE.AUDIOTRACK },
-           new OutputType() { displayName = "OpenSL ES", outputType = FMOD.OUTPUTTYPE.OPENSL },
-           new OutputType() { displayName = "AAudio", outputType = FMOD.OUTPUTTYPE.AAUDIO },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "Java Audio Track", outputType = FMOD.OUTPUTTYPE.AUDIOTRACK },
+            new OutputType() { displayName = "OpenSL ES", outputType = FMOD.OUTPUTTYPE.OPENSL },
+            new OutputType() { displayName = "AAudio", outputType = FMOD.OUTPUTTYPE.AAUDIO },
         };
 
-        public override int CoreCount { get { return MaximumCoreCount; } }
+        public override int CoreCount
+        {
+            get { return MaximumCoreCount; }
+        }
 #endif
     }
 }

@@ -33,7 +33,11 @@ namespace FMODUnity
             Identifier = "playInEditor";
         }
 
-        public override string DisplayName { get { return "Editor"; } }
+        public override string DisplayName
+        {
+            get { return "Editor"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.OSXEditor, this);
@@ -46,20 +50,27 @@ namespace FMODUnity
             yield break;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.PlayInEditor; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.PlayInEditor; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return null;
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield break;
         }
 #endif
 
-        public override bool IsIntrinsic { get { return true; } }
+        public override bool IsIntrinsic
+        {
+            get { return true; }
+        }
 
         public override string GetBankFolder()
         {
@@ -70,7 +81,7 @@ namespace FMODUnity
             if (globalSettings.HasPlatforms)
             {
                 bankFolder = RuntimeUtils.GetCommonPlatformPath(Path.Combine(bankFolder, BuildDirectory));
-            } 
+            }
 
             return bankFolder;
         }
@@ -110,10 +121,16 @@ namespace FMODUnity
             PropertyAccessors.VirtualChannelCount.Set(this, 1024);
         }
 #if UNITY_EDITOR
-        public override OutputType[] ValidOutputTypes { get { return null; } }
+        public override OutputType[] ValidOutputTypes
+        {
+            get { return null; }
+        }
 #endif
 
-        public override List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
+        public override List<CodecChannelCount> DefaultCodecChannels
+        {
+            get { return staticCodecChannels; }
+        }
 
         private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
         {

@@ -21,8 +21,7 @@ namespace FMODUnity
 
         private string currentPath;
 
-        [SerializeField]
-        private EditorParamRef editorParamRef;
+        [SerializeField] private EditorParamRef editorParamRef;
 
         private void OnEnable()
         {
@@ -41,7 +40,8 @@ namespace FMODUnity
             }
 
             EditorGUILayout.PropertyField(trigger, new GUIContent("Trigger"));
-            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter && trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
+            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter &&
+                trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
             {
                 tag.stringValue = EditorGUILayout.TagField("Collision Tag", tag.stringValue);
             }

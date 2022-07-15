@@ -63,6 +63,7 @@ namespace FMODUnity
                 lastMatch = -1;
                 message = null;
             }
+
             EditorGUILayout.PrefixLabel("Replace:");
             replaceText = EditorGUILayout.TextField(replaceText);
 
@@ -74,6 +75,7 @@ namespace FMODUnity
             {
                 OnHierarchyChange();
             }
+
             EditorGUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
@@ -89,6 +91,7 @@ namespace FMODUnity
                     messageType = MessageType.Warning;
                 }
             }
+
             if (GUILayout.Button("Replace"))
             {
                 message = "";
@@ -100,19 +103,23 @@ namespace FMODUnity
                 {
                     Replace();
                 }
+
                 if (lastMatch == -1)
                 {
                     message = "Finished Search";
                     messageType = MessageType.Warning;
                 }
             }
+
             if (GUILayout.Button("Replace All"))
             {
-                if (EditorUtility.DisplayDialog("Replace All", "Are you sure you wish to replace all in the current hierachy?", "yes", "no"))
+                if (EditorUtility.DisplayDialog("Replace All",
+                        "Are you sure you wish to replace all in the current hierachy?", "yes", "no"))
                 {
                     ReplaceAll();
                 }
             }
+
             GUILayout.EndHorizontal();
             if (!string.IsNullOrEmpty(message))
             {
@@ -134,7 +141,8 @@ namespace FMODUnity
         {
             for (int i = lastMatch + 1; i < emitters.Count; i++)
             {
-                if (emitters[i].EventReference.Path.IndexOf(findText, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                if (emitters[i].EventReference.Path.IndexOf(findText, 0, StringComparison.CurrentCultureIgnoreCase) >=
+                    0)
                 {
                     lastMatch = i;
                     EditorGUIUtility.PingObject(emitters[i]);
@@ -144,6 +152,7 @@ namespace FMODUnity
                     return;
                 }
             }
+
             lastMatch = -1;
         }
 
@@ -177,6 +186,7 @@ namespace FMODUnity
                 position += replaceLength;
                 position = path.IndexOf(findText, position, StringComparison.CurrentCultureIgnoreCase);
             }
+
             pathProperty.stringValue = path;
             return serializedObject.ApplyModifiedProperties();
         }
@@ -186,6 +196,5 @@ namespace FMODUnity
             ReplaceText(emitters[lastMatch]);
             FindNext();
         }
-        
     }
 }

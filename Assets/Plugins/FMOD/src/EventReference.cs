@@ -20,10 +20,7 @@ namespace FMODUnity
 
         public bool IsNull
         {
-            get
-            {
-                return string.IsNullOrEmpty(Path) && Guid.IsNull;
-            }
+            get { return string.IsNullOrEmpty(Path) && Guid.IsNull; }
         }
 
         public static EventReference Find(string path)

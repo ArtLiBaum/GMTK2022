@@ -84,6 +84,7 @@ namespace FMODUnityResonance
             {
                 enabledRooms.Remove(room);
             }
+
             // Update the current room effects to be applied.
             if (enabledRooms.Count > 0)
             {
@@ -93,7 +94,7 @@ namespace FMODUnityResonance
                 IntPtr roomPropertiesPtr = Marshal.AllocHGlobal(roomPropertiesSize);
                 Marshal.StructureToPtr(roomProperties, roomPropertiesPtr, false);
                 ListenerPlugin.setParameterData(roomPropertiesIndex, GetBytes(roomPropertiesPtr,
-                                                                               roomPropertiesSize));
+                    roomPropertiesSize));
                 Marshal.FreeHGlobal(roomPropertiesPtr);
             }
             else
@@ -109,9 +110,9 @@ namespace FMODUnityResonance
             // Compute the room position relative to the listener.
             FMOD.VECTOR unused;
             RuntimeManager.CoreSystem.get3DListenerAttributes(0, out listenerPositionFmod, out unused,
-                                                                  out unused, out unused);
+                out unused, out unused);
             Vector3 listenerPosition = new Vector3(listenerPositionFmod.x, listenerPositionFmod.y,
-                                                   listenerPositionFmod.z);
+                listenerPositionFmod.z);
             Vector3 relativePosition = listenerPosition - room.transform.position;
             Quaternion rotationInverse = Quaternion.Inverse(room.transform.rotation);
             // Set the size of the room as the boundary and return whether the listener is inside.
@@ -171,6 +172,7 @@ namespace FMODUnityResonance
                 {
                     listenerPlugin = Initialize();
                 }
+
                 return listenerPlugin;
             }
         }
@@ -183,7 +185,7 @@ namespace FMODUnityResonance
 
         // Converts given |position| and |rotation| from Unity space to audio space.
         private static void ConvertAudioTransformFromUnity(ref Vector3 position,
-          ref Quaternion rotation)
+            ref Quaternion rotation)
         {
             // Compose the transformation matrix.
             Matrix4x4 transformMatrix = Matrix4x4.TRS(position, rotation, Vector3.one);
@@ -203,6 +205,7 @@ namespace FMODUnityResonance
                 Marshal.Copy(ptr, byteArray, 0, length);
                 return byteArray;
             }
+
             // Return an empty array if the pointer is null.
             return new byte[1];
         }
@@ -280,9 +283,11 @@ namespace FMODUnityResonance
                             }
                         }
                     }
+
                     busses[currentBus].unlockChannelGroup();
                 }
             }
+
             RuntimeUtils.DebugLogError(listenerPluginName + " not found in the FMOD project.");
             return dsp;
         }

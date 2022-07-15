@@ -27,7 +27,8 @@ namespace FMODUnity
 
         private static readonly List<bool> pageComplete = new List<bool>(new bool[(int)PAGES.Max]);
 
-        private static readonly List<UpdateTask> updateTasks = new List<UpdateTask>() {
+        private static readonly List<UpdateTask> updateTasks = new List<UpdateTask>()
+        {
             UpdateTask.Create(
                 type: UpdateTaskType.ReorganizePluginFiles,
                 name: "Reorganize Plugin Files",
@@ -39,7 +40,7 @@ namespace FMODUnity
                 type: UpdateTaskType.UpdateEventReferences,
                 name: "Update Event References",
                 description: "Find event references that use the obsolete [EventRef] attribute " +
-                    "and update them to use the EventReference type.",
+                             "and update them to use the EventReference type.",
                 execute: EventReferenceUpdater.ShowWindow,
                 checkComplete: EventReferenceUpdater.IsUpToDate
             ),
@@ -90,7 +91,7 @@ namespace FMODUnity
         private static bool IsStagingUpdateInProgress => nextStagingStep != null;
 
         private const string IgnoreFileText =
-@"# Never ignore DLLs in the FMOD subfolder.
+            @"# Never ignore DLLs in the FMOD subfolder.
 !/[Aa]ssets/Plugins/FMOD/**/lib/*
 
 # Don't ignore images and gizmos used by FMOD in the Unity Editor.
@@ -139,7 +140,8 @@ fmod_editor.log";
             public static UpdateTask Create(UpdateTaskType type, string name, string description,
                 Action execute, Func<bool> checkComplete)
             {
-                return new UpdateTask() {
+                return new UpdateTask()
+                {
                     Type = type,
                     Name = name,
                     Description = description,
@@ -266,7 +268,7 @@ fmod_editor.log";
                 descriptionStyle = new GUIStyle(titleStyle);
                 descriptionStyle.fontStyle = FontStyle.Normal;
                 descriptionStyle.alignment = TextAnchor.MiddleLeft;
-                descriptionStyle.margin = new RectOffset(5,0,0,0);
+                descriptionStyle.margin = new RectOffset(5, 0, 0, 0);
 
                 titleLeftStyle = new GUIStyle(descriptionStyle);
                 titleLeftStyle.fontStyle = FontStyle.Bold;
@@ -300,14 +302,30 @@ fmod_editor.log";
 
                     switch (currentPage)
                     {
-                        case PAGES.Welcome: WelcomePage(); break;
-                        case PAGES.Updating: UpdatingPage(); break;
-                        case PAGES.Linking: LinkingPage(); break;
-                        case PAGES.Listener: ListenerPage(); break;
-                        case PAGES.UnityAudio: DisableUnityAudioPage(); break;
-                        case PAGES.UnitySources: UnitySources(); break;
-                        case PAGES.SourceControl: SourceControl(); break;
-                        case PAGES.End: EndPage(); break;
+                        case PAGES.Welcome:
+                            WelcomePage();
+                            break;
+                        case PAGES.Updating:
+                            UpdatingPage();
+                            break;
+                        case PAGES.Linking:
+                            LinkingPage();
+                            break;
+                        case PAGES.Listener:
+                            ListenerPage();
+                            break;
+                        case PAGES.UnityAudio:
+                            DisableUnityAudioPage();
+                            break;
+                        case PAGES.UnitySources:
+                            UnitySources();
+                            break;
+                        case PAGES.SourceControl:
+                            SourceControl();
+                            break;
+                        case PAGES.End:
+                            EndPage();
+                            break;
                     }
 
                     Buttons();
@@ -332,6 +350,7 @@ fmod_editor.log";
                                     EditorUtility.SetDirty(Settings.Instance);
                                 }
                             }
+
                             GUILayout.FlexibleSpace();
                         }
                     }
@@ -340,6 +359,7 @@ fmod_editor.log";
                         EditorGUILayout.Space();
                         EditorGUILayout.Space();
                     }
+
                     EditorGUILayout.Space();
                     EditorGUILayout.Space();
                 }
@@ -350,16 +370,24 @@ fmod_editor.log";
         {
             switch (currentPage)
             {
-                case PAGES.Welcome:                         break;
-                case PAGES.Updating: CheckUpdatesComplete();break;
-                case PAGES.Linking:     CheckStudioLinked();break;
-                case PAGES.Listener:    CheckListeners();   break;
-                case PAGES.UnityAudio:                      break;
-                case PAGES.UnitySources:CheckSources();     break;
-                case PAGES.SourceControl:                   break;
-                case PAGES.End:                             break;
-                case PAGES.Max:                             break;
-                default:                                    break;
+                case PAGES.Welcome: break;
+                case PAGES.Updating:
+                    CheckUpdatesComplete();
+                    break;
+                case PAGES.Linking:
+                    CheckStudioLinked();
+                    break;
+                case PAGES.Listener:
+                    CheckListeners();
+                    break;
+                case PAGES.UnityAudio: break;
+                case PAGES.UnitySources:
+                    CheckSources();
+                    break;
+                case PAGES.SourceControl: break;
+                case PAGES.End: break;
+                case PAGES.Max: break;
+                default: break;
             }
         }
 
@@ -382,7 +410,8 @@ fmod_editor.log";
         {
             var UListeners = Resources.FindObjectsOfTypeAll<AudioListener>();
             var FListeners = Resources.FindObjectsOfTypeAll<StudioListener>();
-            if ((unityListeners == null || fmodListeners == null) || (!unityListeners.SequenceEqual(UListeners) || !fmodListeners.SequenceEqual(FListeners)))
+            if ((unityListeners == null || fmodListeners == null) || (!unityListeners.SequenceEqual(UListeners) ||
+                                                                      !fmodListeners.SequenceEqual(FListeners)))
             {
                 unityListeners = UListeners;
                 bFoundUnityListener = unityListeners.Length > 0;
@@ -390,6 +419,7 @@ fmod_editor.log";
                 bFoundFmodListener = fmodListeners.Length > 0;
                 Repaint();
             }
+
             pageComplete[(int)PAGES.Listener] = (!bFoundUnityListener && bFoundFmodListener);
         }
 
@@ -404,6 +434,7 @@ fmod_editor.log";
                     m_SimpleTreeView.Reload();
                 }
             }
+
             pageComplete[(int)PAGES.UnitySources] = ASources != null ? (ASources.Length == 0) : true;
         }
 
@@ -426,7 +457,8 @@ fmod_editor.log";
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.LabelField("This setup wizard will help you configure your project to use FMOD.", titleStyle);
+            EditorGUILayout.LabelField("This setup wizard will help you configure your project to use FMOD.",
+                titleStyle);
 
             GUILayout.FlexibleSpace();
         }
@@ -445,6 +477,7 @@ fmod_editor.log";
                     {
                         GUI.backgroundColor = (pageComplete[i] ? Color.green : Color.yellow);
                     }
+
                     crumbStyle.normal.textColor = (i == (int)currentPage ? crumbHighlight : crumbDefault);
                     using (var b = new EditorGUILayout.HorizontalScope("button", GUILayout.Height(22)))
                     {
@@ -452,10 +485,13 @@ fmod_editor.log";
                         {
                             currentPage = (PAGES)i;
                         }
+
                         EditorGUILayout.Space();
                     }
+
                     GUI.backgroundColor = oldColor;
                 }
+
                 GUILayout.FlexibleSpace();
             }
         }
@@ -463,7 +499,7 @@ fmod_editor.log";
         private void UpdatingPage()
         {
             EditorGUILayout.LabelField("If you are updating an existing FMOD installation, you may need to " +
-                "perform some update tasks.", titleLeftStyle);
+                                       "perform some update tasks.", titleLeftStyle);
 
             GUILayout.FlexibleSpace();
 
@@ -500,6 +536,7 @@ fmod_editor.log";
 
                         GUILayout.FlexibleSpace();
                     }
+
                     EditorGUILayout.Space();
                 }
             }
@@ -509,13 +546,14 @@ fmod_editor.log";
 
         private void LinkingPage()
         {
-            EditorGUILayout.LabelField("In order to access your FMOD Studio content you need to locate the FMOD Studio Project" +
+            EditorGUILayout.LabelField(
+                "In order to access your FMOD Studio content you need to locate the FMOD Studio Project" +
                 " or the .bank files that FMOD Studio produces, and configure a few other settings.", titleLeftStyle);
             GUILayout.FlexibleSpace();
 
             EditorGUILayout.LabelField("Choose how to access your FMOD Studio content:", titleLeftStyle);
 
-            EditorGUILayout.Space(); 
+            EditorGUILayout.Space();
             using (new GUILayout.HorizontalScope())
             {
                 using (new GUILayout.VerticalScope("box"))
@@ -532,9 +570,11 @@ fmod_editor.log";
                         {
                             SettingsEditor.BrowseForSourceProjectPath(serializedObject);
                         }
+
                         GUILayout.Label("If you have the complete FMOD Studio Project.",
                             descriptionStyle, GUILayout.Height(sourceButtonStyle.fixedHeight));
                     }
+
                     EditorGUILayout.Space();
                     using (new GUILayout.HorizontalScope())
                     {
@@ -543,10 +583,13 @@ fmod_editor.log";
                         {
                             SettingsEditor.BrowseForSourceBankPath(serializedObject);
                         }
-                        EditorGUILayout.LabelField("If you have the contents of the Build folder for a single platform.",
+
+                        EditorGUILayout.LabelField(
+                            "If you have the contents of the Build folder for a single platform.",
                             descriptionStyle, GUILayout.Height(sourceButtonStyle.fixedHeight));
                         GUILayout.FlexibleSpace();
                     }
+
                     EditorGUILayout.Space();
                     using (new GUILayout.HorizontalScope())
                     {
@@ -555,7 +598,9 @@ fmod_editor.log";
                         {
                             SettingsEditor.BrowseForSourceBankPath(serializedObject, true);
                         }
-                        EditorGUILayout.LabelField("If you have the contents of the Build folder for multiple platforms, " +
+
+                        EditorGUILayout.LabelField(
+                            "If you have the contents of the Build folder for multiple platforms, " +
                             "with each platform in its own subdirectory.",
                             descriptionStyle, GUILayout.Height(sourceButtonStyle.fixedHeight));
                     }
@@ -609,8 +654,12 @@ fmod_editor.log";
 
         private void ListenerPage()
         {
-            EditorGUILayout.LabelField("If you do not intend to use the built in Unity audio, you can choose to replace the Audio Listener with the FMOD Studio Listener.\n", titleLeftStyle);
-            EditorGUILayout.LabelField("Adding the FMOD Studio Listener component to the main camera provides the FMOD Engine with the information it needs to play 3D events correctly.", titleLeftStyle);
+            EditorGUILayout.LabelField(
+                "If you do not intend to use the built in Unity audio, you can choose to replace the Audio Listener with the FMOD Studio Listener.\n",
+                titleLeftStyle);
+            EditorGUILayout.LabelField(
+                "Adding the FMOD Studio Listener component to the main camera provides the FMOD Engine with the information it needs to play 3D events correctly.",
+                titleLeftStyle);
             EditorGUILayout.Space();
             GUILayout.FlexibleSpace();
 
@@ -633,18 +682,24 @@ fmod_editor.log";
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("Replace Unity " + ((unityListeners != null && unityListeners.Length > 1) ? "Listeners" : "Listener") + " with FMOD Audio Listener.", buttonStyle))
+                    if (GUILayout.Button(
+                            "Replace Unity " +
+                            ((unityListeners != null && unityListeners.Length > 1) ? "Listeners" : "Listener") +
+                            " with FMOD Audio Listener.", buttonStyle))
                     {
                         for (int i = 0; i < unityListeners.Length; i++)
                         {
                             var listener = unityListeners[i];
                             if (listener)
                             {
-                                RuntimeUtils.DebugLog("[FMOD Assistant] Replacing Unity Listener with FMOD Listener on " + listener.gameObject.name);
+                                RuntimeUtils.DebugLog(
+                                    "[FMOD Assistant] Replacing Unity Listener with FMOD Listener on " +
+                                    listener.gameObject.name);
                                 if (listener.GetComponent<StudioListener>() == null)
                                 {
                                     listener.gameObject.AddComponent(typeof(StudioListener));
                                 }
+
                                 DestroyImmediate(unityListeners[i]);
                                 EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                                 Repaint();
@@ -652,6 +707,7 @@ fmod_editor.log";
                         }
                     }
                 }
+
                 GUILayout.FlexibleSpace();
             }
         }
@@ -671,7 +727,10 @@ fmod_editor.log";
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.FlexibleSpace();
-                        EditorGUILayout.LabelField(listeners.Length + " " + (bUnityListenerType ? "Unity" : "FMOD") + " " + (listeners.Length > 1 ? "Listeners" : "Listener") + " found.", titleStyle, GUILayout.ExpandWidth(true));
+                        EditorGUILayout.LabelField(
+                            listeners.Length + " " + (bUnityListenerType ? "Unity" : "FMOD") + " " +
+                            (listeners.Length > 1 ? "Listeners" : "Listener") + " found.", titleStyle,
+                            GUILayout.ExpandWidth(true));
                         GUILayout.FlexibleSpace();
                     }
 
@@ -681,13 +740,15 @@ fmod_editor.log";
                         foreach (T l in listeners)
                         {
                             var listener = l as Component;
-                            if (listener != null && GUILayout.Button(listener.gameObject.name, GUILayout.ExpandWidth(true)))
+                            if (listener != null &&
+                                GUILayout.Button(listener.gameObject.name, GUILayout.ExpandWidth(true)))
                             {
                                 Selection.activeGameObject = listener.gameObject;
                                 EditorGUIUtility.PingObject(listener);
                             }
                         }
                     }
+
                     GUILayout.FlexibleSpace();
                 }
                 else
@@ -695,9 +756,11 @@ fmod_editor.log";
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.FlexibleSpace();
-                        EditorGUILayout.LabelField("No " + (bUnityListenerType ? "Unity" : "FMOD") + " Listeners found.", titleStyle);
+                        EditorGUILayout.LabelField(
+                            "No " + (bUnityListenerType ? "Unity" : "FMOD") + " Listeners found.", titleStyle);
                         GUILayout.FlexibleSpace();
                     }
+
                     GUILayout.FlexibleSpace();
                 }
             }
@@ -705,7 +768,9 @@ fmod_editor.log";
 
         private void DisableUnityAudioPage()
         {
-            EditorGUILayout.LabelField("We recommend that you disable the built-in Unity audio for all platforms, to prevent it from consuming system audio resources that the FMOD Engine needs.", titleStyle);
+            EditorGUILayout.LabelField(
+                "We recommend that you disable the built-in Unity audio for all platforms, to prevent it from consuming system audio resources that the FMOD Engine needs.",
+                titleStyle);
             GUILayout.FlexibleSpace();
 
             var audioManager = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/AudioManager.asset")[0];
@@ -717,17 +782,19 @@ fmod_editor.log";
                 using (new EditorGUI.DisabledGroupScope(prop.boolValue))
                 {
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button(prop.boolValue ? "Built in audio has been disabled" : "Disable built in audio", buttonStyle))
+                    if (GUILayout.Button(prop.boolValue ? "Built in audio has been disabled" : "Disable built in audio",
+                            buttonStyle))
                     {
                         prop.boolValue = true;
                         serializedManager.ApplyModifiedProperties();
                         RuntimeUtils.DebugLog("[FMOD Assistant] Built in Unity audio has been disabled.");
                         Repaint();
                     }
-
                 }
+
                 GUILayout.FlexibleSpace();
             }
+
             pageComplete[(int)PAGES.UnityAudio] = prop.boolValue;
 
             GUILayout.FlexibleSpace();
@@ -737,7 +804,9 @@ fmod_editor.log";
         {
             if (unityAudioSources != null && unityAudioSources.Length > 0)
             {
-                EditorGUILayout.LabelField("Listed below are all the Unity Audio Sources found in the currently loaded scenes and the Assets directory.\nSelect an Audio Source and replace it with an FMOD Studio Event Emitter.", titleStyle);
+                EditorGUILayout.LabelField(
+                    "Listed below are all the Unity Audio Sources found in the currently loaded scenes and the Assets directory.\nSelect an Audio Source and replace it with an FMOD Studio Event Emitter.",
+                    titleStyle);
                 EditorGUILayout.Space();
 
                 if (m_SimpleTreeView == null)
@@ -746,6 +815,7 @@ fmod_editor.log";
                     {
                         m_TreeViewState = new TreeViewState();
                     }
+
                     m_SimpleTreeView = new SimpleTreeView(m_TreeViewState);
                 }
 
@@ -761,7 +831,8 @@ fmod_editor.log";
 
         private void SourceControl()
         {
-            EditorGUILayout.LabelField("There are a number of files produced by FMOD for Unity that should be ignored by source control. " +
+            EditorGUILayout.LabelField(
+                "There are a number of files produced by FMOD for Unity that should be ignored by source control. " +
                 "Here is an example of what you should add to your source control ignore file:", titleLeftStyle);
             GUILayout.FlexibleSpace();
 
@@ -772,8 +843,10 @@ fmod_editor.log";
                 {
                     EditorGUILayout.TextArea(IgnoreFileText);
                 }
+
                 GUILayout.FlexibleSpace();
             }
+
             pageComplete[(int)PAGES.SourceControl] = true;
         }
 
@@ -792,21 +865,27 @@ fmod_editor.log";
                         {
                             EditorGUILayout.LabelField(pageNames[i], titleStyle);
                             EditorGUILayout.Space();
-                            GUILayout.Label(pageComplete[i] ? tickTexture : crossTexture, iconStyle, GUILayout.ExpandWidth(false));
+                            GUILayout.Label(pageComplete[i] ? tickTexture : crossTexture, iconStyle,
+                                GUILayout.ExpandWidth(false));
 
                             if (pageComplete[i] == false)
                             {
                                 completed = false;
                             }
                         }
+
                         GUILayout.Space(8);
                     }
                 }
+
                 GUILayout.FlexibleSpace();
             }
 
             GUILayout.FlexibleSpace();
-            EditorGUILayout.LabelField(completed ? "FMOD for Unity has been set up successfully!" : "FMOD for Unity has not finished being set up.", titleStyle);
+            EditorGUILayout.LabelField(
+                completed
+                    ? "FMOD for Unity has been set up successfully!"
+                    : "FMOD for Unity has not finished being set up.", titleStyle);
             GUILayout.FlexibleSpace();
 
             using (new EditorGUILayout.HorizontalScope())
@@ -873,6 +952,7 @@ fmod_editor.log";
                     {
                         this.Close();
                     }
+
                     currentPage++;
                 }
 
@@ -901,7 +981,6 @@ fmod_editor.log";
 
             using (new GUILayout.VerticalScope(columnStyle))
             {
-
                 foreach (StagingSystem.UpdateStep step in StagingSystem.UpdateSteps)
                 {
                     bool complete = step.Stage < nextStagingStep.Stage;
@@ -987,13 +1066,14 @@ fmod_editor.log";
                 {
                     go = ((ParentItem)((AudioSourceItem)item).parent).gameObject;
                 }
+
                 Selection.activeGameObject = go;
             }
         }
 
         protected override TreeViewItem BuildRoot()
         {
-            var root = new TreeViewItem (-1, -1);
+            var root = new TreeViewItem(-1, -1);
 
             CreateItems(root, Resources.FindObjectsOfTypeAll<AudioSource>());
             showAlternatingRowBackgrounds = true;
@@ -1006,6 +1086,7 @@ fmod_editor.log";
         private class AudioSourceItem : TreeViewItem
         {
             const string audioIcon = "AudioSource Icon";
+
             public AudioSourceItem(AudioSource source) : base(source.GetHashCode())
             {
                 displayName = (source.clip ? source.clip.name : "None");
@@ -1033,16 +1114,16 @@ fmod_editor.log";
                 switch (PrefabUtility.GetPrefabAssetType(go))
                 {
                     case PrefabAssetType.NotAPrefab:
-                    icon = (Texture2D)EditorGUIUtility.IconContent(goIcon).image;
+                        icon = (Texture2D)EditorGUIUtility.IconContent(goIcon).image;
                         break;
                     case PrefabAssetType.Regular:
-                    icon = (Texture2D)EditorGUIUtility.IconContent(prefabIcon).image;
+                        icon = (Texture2D)EditorGUIUtility.IconContent(prefabIcon).image;
                         break;
                     case PrefabAssetType.Model:
-                    icon = (Texture2D)EditorGUIUtility.IconContent(prefabModelIcon).image;
+                        icon = (Texture2D)EditorGUIUtility.IconContent(prefabModelIcon).image;
                         break;
                     case PrefabAssetType.Variant:
-                    icon = (Texture2D)EditorGUIUtility.IconContent(prefabVariantIcon).image;
+                        icon = (Texture2D)EditorGUIUtility.IconContent(prefabVariantIcon).image;
                         break;
                 }
             }
@@ -1054,7 +1135,7 @@ fmod_editor.log";
             const string sceneIcon = "SceneAsset Icon";
             const string folderIcon = "Folder Icon";
 
-            public SceneItem(Scene scene) : base (scene.GetHashCode())
+            public SceneItem(Scene scene) : base(scene.GetHashCode())
             {
                 m_scene = scene;
                 if (m_scene.IsValid())
@@ -1072,7 +1153,7 @@ fmod_editor.log";
 
         private void CreateItems(TreeViewItem root, AudioSource[] audioSources)
         {
-            for(int i = 0; i < audioSources.Length; i++)
+            for (int i = 0; i < audioSources.Length; i++)
             {
                 AudioSource audioSource = audioSources[i];
 
@@ -1087,6 +1168,7 @@ fmod_editor.log";
                         obj = obj.transform.parent.gameObject;
                         gameObjects.Add(obj);
                     }
+
                     gameObjects.Reverse();
 
                     var parentItem = FindItem(obj.scene.GetHashCode(), root);
@@ -1104,6 +1186,7 @@ fmod_editor.log";
                             objItem = new ParentItem(go);
                             parentItem.AddChild(objItem);
                         }
+
                         parentItem = objItem;
                     }
                 }

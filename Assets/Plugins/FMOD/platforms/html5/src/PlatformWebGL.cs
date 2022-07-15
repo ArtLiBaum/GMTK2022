@@ -34,7 +34,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformWebGL>("46fbfdf3fc43db0458918377fd40293e");
         }
 
-        public override string DisplayName { get { return "WebGL"; } }
+        public override string DisplayName
+        {
+            get { return "WebGL"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.WebGLPlayer, this);
@@ -46,20 +50,24 @@ namespace FMODUnity
             yield return BuildTarget.WebGL;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.WebGL; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.WebGL; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("html5", "Plugins/WebGL");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
-            #if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
             bool useWASM = true;
-            #else
+#else
             bool useWASM = false;
-            #endif
+#endif
 
             if (allVariants || useWASM)
             {
@@ -72,28 +80,29 @@ namespace FMODUnity
             }
         }
 
-        public override bool IsFMODStaticallyLinked { get { return true; } }
+        public override bool IsFMODStaticallyLinked
+        {
+            get { return true; }
+        }
 #endif
 
         public override string GetPluginPath(string pluginName)
         {
-            #if UNITY_2021_2_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
             return string.Format("{0}/{1}.a", GetPluginBasePath(), pluginName);
-            #else
+#else
             return string.Format("{0}/{1}.bc", GetPluginBasePath(), pluginName);
-            #endif
+#endif
         }
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "JavaScript webaudio output", outputType = FMOD.OUTPUTTYPE.WEBAUDIO },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "JavaScript webaudio output", outputType = FMOD.OUTPUTTYPE.WEBAUDIO },
         };
 #endif
     }

@@ -11,7 +11,7 @@ namespace FMODUnity
     }
 
     [AddComponentMenu("FMOD Studio/FMOD Studio Parameter Trigger")]
-    public class StudioParameterTrigger: EventHandler
+    public class StudioParameterTrigger : EventHandler
     {
         public EmitterRef[] Emitters;
         public EmitterGameEvent TriggerEvent;
@@ -23,7 +23,8 @@ namespace FMODUnity
                 var emitterRef = Emitters[i];
                 if (emitterRef.Target != null && !emitterRef.Target.EventReference.IsNull)
                 {
-                    FMOD.Studio.EventDescription eventDesc = RuntimeManager.GetEventDescription(emitterRef.Target.EventReference);
+                    FMOD.Studio.EventDescription eventDesc =
+                        RuntimeManager.GetEventDescription(emitterRef.Target.EventReference);
                     if (eventDesc.isValid())
                     {
                         for (int j = 0; j < Emitters[i].Params.Length; j++)
@@ -54,7 +55,8 @@ namespace FMODUnity
                 {
                     for (int j = 0; j < Emitters[i].Params.Length; j++)
                     {
-                        emitterRef.Target.EventInstance.setParameterByID(Emitters[i].Params[j].ID, Emitters[i].Params[j].Value);
+                        emitterRef.Target.EventInstance.setParameterByID(Emitters[i].Params[j].ID,
+                            Emitters[i].Params[j].Value);
                     }
                 }
             }

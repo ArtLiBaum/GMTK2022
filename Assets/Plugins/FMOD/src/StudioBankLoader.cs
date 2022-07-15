@@ -8,8 +8,7 @@ namespace FMODUnity
     {
         public LoaderGameEvent LoadEvent;
         public LoaderGameEvent UnloadEvent;
-        [BankRef]
-        public List<string> Banks;
+        [BankRef] public List<string> Banks;
         public string CollisionTag;
         public bool PreloadSamples;
         private bool isQuitting;
@@ -20,6 +19,7 @@ namespace FMODUnity
             {
                 Load();
             }
+
             if (UnloadEvent == gameEvent)
             {
                 Unload();
@@ -104,6 +104,7 @@ namespace FMODUnity
                     RuntimeUtils.DebugLogException(e);
                 }
             }
+
             RuntimeManager.WaitForAllSampleLoading();
         }
 

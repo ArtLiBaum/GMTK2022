@@ -35,7 +35,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformAppleTV>("e7a046c753c3c3d4aacc91f6597f310d");
         }
 
-        public override string DisplayName { get { return "Apple TV"; } }
+        public override string DisplayName
+        {
+            get { return "Apple TV"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.tvOS, this);
@@ -47,14 +51,18 @@ namespace FMODUnity
             yield return BuildTarget.tvOS;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.AppleTV; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.AppleTV; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("tvos", "Plugins/tvOS");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             if (allVariants || PlayerSettings.tvOS.sdkVersion == tvOSSdkVersion.Device)
             {
@@ -83,14 +91,12 @@ namespace FMODUnity
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
         };
 #endif
     }

@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace FMODUnity
 {
     public class EditorBankRef : ScriptableObject
     {
-        [SerializeField]
-        public string Path;
+        [SerializeField] public string Path;
 
-        [SerializeField]
-        public string Name;
+        [SerializeField] public string Name;
 
-        [SerializeField]
-        public string StudioPath;
+        [SerializeField] public string StudioPath;
 
-        [SerializeField]
-        private Int64 lastModified;
+        [SerializeField] private Int64 lastModified;
 
-        [SerializeField]
-        public List<NameValuePair> FileSizes;
+        [SerializeField] public List<NameValuePair> FileSizes;
 
         public bool Exists;
 
@@ -56,6 +52,7 @@ namespace FMODUnity
                 studioPath = studioPath.Substring(0, studioPath.LastIndexOf("/") + 1);
                 studioPath += stringCmp;
             }
+
             StudioPath = studioPath;
         }
 

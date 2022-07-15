@@ -34,7 +34,11 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformMac>("52eb9df5db46521439908db3a29a1bbb");
         }
 
-        public override string DisplayName { get { return "macOS"; } }
+        public override string DisplayName
+        {
+            get { return "macOS"; }
+        }
+
         public override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.OSXPlayer, this);
@@ -46,14 +50,18 @@ namespace FMODUnity
             yield return BuildTarget.StandaloneOSX;
         }
 
-        public override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Mac; } }
+        public override Legacy.Platform LegacyIdentifier
+        {
+            get { return Legacy.Platform.Mac; }
+        }
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("mac", "Plugins");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield return new FileRecord(string.Format("fmodstudio{0}.bundle", suffix));
         }
@@ -77,18 +85,19 @@ namespace FMODUnity
 #if UNITY_EDITOR
         public override OutputType[] ValidOutputTypes
         {
-            get
-            {
-                return sValidOutputTypes;
-            }
+            get { return sValidOutputTypes; }
         }
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
+        private static OutputType[] sValidOutputTypes =
+        {
+            new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
         };
 #endif
 
-        public override List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
+        public override List<CodecChannelCount> DefaultCodecChannels
+        {
+            get { return staticCodecChannels; }
+        }
 
         private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
         {

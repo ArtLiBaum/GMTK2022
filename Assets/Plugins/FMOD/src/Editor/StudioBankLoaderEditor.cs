@@ -61,8 +61,10 @@ namespace FMODUnity
                 {
                     banks.DeleteArrayElementAtIndex(i);
                 }
+
                 EditorGUILayout.EndHorizontal();
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -83,6 +85,7 @@ namespace FMODUnity
                     e.Use();
                 }
             }
+
             if (e.type == EventType.DragUpdated)
             {
                 if (DragAndDrop.objectReferences.Length > 0 &&

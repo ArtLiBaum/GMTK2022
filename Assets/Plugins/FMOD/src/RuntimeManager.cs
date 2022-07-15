@@ -35,7 +35,8 @@ namespace FMODUnity
 
         private bool isMuted = false;
 
-        private Dictionary<FMOD.GUID, FMOD.Studio.EventDescription> cachedDescriptions = new Dictionary<FMOD.GUID, FMOD.Studio.EventDescription>(new GuidComparer());
+        private Dictionary<FMOD.GUID, FMOD.Studio.EventDescription> cachedDescriptions =
+            new Dictionary<FMOD.GUID, FMOD.Studio.EventDescription>(new GuidComparer());
 
         private Dictionary<string, LoadedBank> loadedBanks = new Dictionary<string, LoadedBank>();
         private List<string> sampleLoadRequests = new List<string>();
@@ -59,19 +60,17 @@ namespace FMODUnity
 
         public static bool IsMuted
         {
-            get
-            {
-                return Instance.isMuted;
-            }
+            get { return Instance.isMuted; }
         }
 
         [AOT.MonoPInvokeCallback(typeof(FMOD.DEBUG_CALLBACK))]
-        private static FMOD.RESULT DEBUG_CALLBACK(FMOD.DEBUG_FLAGS flags, IntPtr filePtr, int line, IntPtr funcPtr, IntPtr messagePtr)
+        private static FMOD.RESULT DEBUG_CALLBACK(FMOD.DEBUG_FLAGS flags, IntPtr filePtr, int line, IntPtr funcPtr,
+            IntPtr messagePtr)
         {
             FMOD.StringWrapper file = new FMOD.StringWrapper(filePtr);
             FMOD.StringWrapper func = new FMOD.StringWrapper(funcPtr);
             FMOD.StringWrapper message = new FMOD.StringWrapper(messagePtr);
-            
+
             if (flags == FMOD.DEBUG_FLAGS.ERROR)
             {
                 RuntimeUtils.DebugLogError(string.Format(("[FMOD] {0} : {1}"), (string)func, (string)message));
@@ -84,22 +83,29 @@ namespace FMODUnity
             {
                 RuntimeUtils.DebugLog(string.Format(("[FMOD] {0} : {1}"), (string)func, (string)message));
             }
+
             return FMOD.RESULT.OK;
         }
 
         [AOT.MonoPInvokeCallback(typeof(FMOD.SYSTEM_CALLBACK))]
-        private static FMOD.RESULT ERROR_CALLBACK(IntPtr system, FMOD.SYSTEM_CALLBACK_TYPE type, IntPtr commanddata1, IntPtr commanddata2, IntPtr userdata)
+        private static FMOD.RESULT ERROR_CALLBACK(IntPtr system, FMOD.SYSTEM_CALLBACK_TYPE type, IntPtr commanddata1,
+            IntPtr commanddata2, IntPtr userdata)
         {
-            FMOD.ERRORCALLBACK_INFO callbackInfo = (FMOD.ERRORCALLBACK_INFO)FMOD.MarshalHelper.PtrToStructure(commanddata1, typeof(FMOD.ERRORCALLBACK_INFO));
+            FMOD.ERRORCALLBACK_INFO callbackInfo =
+                (FMOD.ERRORCALLBACK_INFO)FMOD.MarshalHelper.PtrToStructure(commanddata1,
+                    typeof(FMOD.ERRORCALLBACK_INFO));
 
             // Filter out benign expected errors.
-            if ((callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNEL || callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNELCONTROL) && callbackInfo.result == FMOD.RESULT.ERR_INVALID_HANDLE)
+            if ((callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNEL ||
+                 callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNELCONTROL) &&
+                callbackInfo.result == FMOD.RESULT.ERR_INVALID_HANDLE)
             {
                 return FMOD.RESULT.OK;
             }
 
             RuntimeUtils.DebugLogError(string.Format("[FMOD] {0}({1}) returned {2} for {3} (0x{4}).",
-                (string)callbackInfo.functionname, (string)callbackInfo.functionparams, callbackInfo.result, callbackInfo.instancetype, callbackInfo.instance.ToString("X")));
+                (string)callbackInfo.functionname, (string)callbackInfo.functionparams, callbackInfo.result,
+                callbackInfo.instancetype, callbackInfo.instance.ToString("X")));
             return FMOD.RESULT.OK;
         }
 
@@ -114,7 +120,10 @@ namespace FMODUnity
 
                 if (instance == null)
                 {
-                    FMOD.RESULT initResult = FMOD.RESULT.OK; // Initialize can return an error code if it falls back to NO_SOUND, throw it as a non-cached exception
+                    FMOD.RESULT
+                        initResult =
+                            FMOD.RESULT
+                                .OK; // Initialize can return an error code if it falls back to NO_SOUND, throw it as a non-cached exception
 
                     // When reloading scripts the static instance pointer will be cleared, find the old manager and clean it up
                     foreach (RuntimeManager manager in Resources.FindObjectsOfTypeAll<RuntimeManager>())
@@ -129,11 +138,12 @@ namespace FMODUnity
                     {
                         DontDestroyOnLoad(gameObject);
                     }
+
                     gameObject.hideFlags = HideFlags.HideAndDontSave;
 
                     try
                     {
-                        #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
                         // First, obtain the current activity context
                         AndroidJavaObject activity = null;
                         using (var activityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -152,7 +162,7 @@ namespace FMODUnity
                                 RuntimeUtils.DebugLogWarning("[FMOD] Cannot initialize Java wrapper");
                             }
                         }
-                        #endif
+#endif
 
                         RuntimeUtils.EnforceLibraryOrder();
                         initResult = instance.Initialize();
@@ -164,6 +174,7 @@ namespace FMODUnity
                         {
                             initException = new SystemNotInitializedException(e);
                         }
+
                         throw initException;
                     }
 
@@ -172,6 +183,7 @@ namespace FMODUnity
                         throw new SystemNotInitializedException(initResult, "Output forced to NO SOUND mode");
                     }
                 }
+
                 return instance;
             }
         }
@@ -226,10 +238,10 @@ namespace FMODUnity
 
         private FMOD.RESULT Initialize()
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorApplication.playModeStateChanged += HandlePlayModeStateChange;
             AppDomain.CurrentDomain.DomainUnload += HandleDomainUnload;
-            #endif // UNITY_EDITOR
+#endif // UNITY_EDITOR
 
             FMOD.RESULT result = FMOD.RESULT.OK;
             FMOD.RESULT initResult = FMOD.RESULT.OK;
@@ -256,27 +268,29 @@ namespace FMODUnity
 
             currentPlatform.PreSystemCreate(CheckInitResult);
 
-            #if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             debugCallback = new FMOD.DEBUG_CALLBACK(DEBUG_CALLBACK);
             result = FMOD.Debug.Initialize(fmodSettings.LoggingLevel, FMOD.DEBUG_MODE.CALLBACK, debugCallback, null);
-            if(result == FMOD.RESULT.ERR_UNSUPPORTED)
+            if (result == FMOD.RESULT.ERR_UNSUPPORTED)
             {
-                RuntimeUtils.DebugLogWarning("[FMOD] Unable to initialize debug logging: Logging will be disabled.\nCheck the Import Settings of the FMOD libs to enable the logging library.");
+                RuntimeUtils.DebugLogWarning(
+                    "[FMOD] Unable to initialize debug logging: Logging will be disabled.\nCheck the Import Settings of the FMOD libs to enable the logging library.");
             }
             else
             {
                 CheckInitResult(result, "FMOD.Debug.Initialize");
             }
-            #endif
+#endif
 
-            FMOD.Studio.INITFLAGS studioInitFlags = FMOD.Studio.INITFLAGS.NORMAL | FMOD.Studio.INITFLAGS.DEFERRED_CALLBACKS;
+            FMOD.Studio.INITFLAGS studioInitFlags =
+                FMOD.Studio.INITFLAGS.NORMAL | FMOD.Studio.INITFLAGS.DEFERRED_CALLBACKS;
             if (currentPlatform.IsLiveUpdateEnabled)
             {
                 studioInitFlags |= FMOD.Studio.INITFLAGS.LIVEUPDATE;
                 advancedSettings.profilePort = (ushort)currentPlatform.LiveUpdatePort;
             }
 
-retry:
+            retry:
             result = FMOD.Studio.System.create(out studioSystem);
             CheckInitResult(result, "FMOD.Studio.System.create");
 
@@ -332,12 +346,15 @@ retry:
             result = studioSystem.initialize(virtualChannels, studioInitFlags, FMOD.INITFLAGS.NORMAL, IntPtr.Zero);
             if (result != FMOD.RESULT.OK && initResult == FMOD.RESULT.OK)
             {
-                initResult = result; // Save this to throw at the end (we'll attempt NO SOUND to shield ourselves from unexpected device failures)
+                initResult =
+                    result; // Save this to throw at the end (we'll attempt NO SOUND to shield ourselves from unexpected device failures)
                 outputType = FMOD.OUTPUTTYPE.NOSOUND;
-                RuntimeUtils.DebugLogErrorFormat("[FMOD] Studio::System::initialize returned {0}, defaulting to no-sound mode.", result.ToString());
+                RuntimeUtils.DebugLogErrorFormat(
+                    "[FMOD] Studio::System::initialize returned {0}, defaulting to no-sound mode.", result.ToString());
 
                 goto retry;
             }
+
             CheckInitResult(result, "Studio::System::initialize");
 
             // Test network functionality triggered during System::update
@@ -349,7 +366,8 @@ retry:
                 if (result == FMOD.RESULT.ERR_NET_SOCKET_ERROR)
                 {
                     studioInitFlags &= ~FMOD.Studio.INITFLAGS.LIVEUPDATE;
-                    RuntimeUtils.DebugLogWarning("[FMOD] Cannot open network port for Live Update (in-use), restarting with Live Update disabled.");
+                    RuntimeUtils.DebugLogWarning(
+                        "[FMOD] Cannot open network port for Live Update (in-use), restarting with Live Update disabled.");
 
                     result = studioSystem.release();
                     CheckInitResult(result, "FMOD.Studio.System.Release");
@@ -361,9 +379,9 @@ retry:
             currentPlatform.LoadPlugins(coreSystem, CheckInitResult);
             LoadBanks(fmodSettings);
 
-            #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
             RegisterSuspendCallback(HandleInterrupt);
-            #endif
+#endif
 
             return initResult;
         }
@@ -393,12 +411,12 @@ retry:
         {
             public FMOD.Studio.EventInstance instance;
             public Transform transform;
-            #if UNITY_PHYSICS_EXIST
+#if UNITY_PHYSICS_EXIST
             public Rigidbody rigidBody;
-            #endif
-            #if UNITY_PHYSICS2D_EXIST
+#endif
+#if UNITY_PHYSICS2D_EXIST
             public Rigidbody2D rigidBody2D;
-            #endif
+#endif
         }
 
         private void Update()
@@ -408,7 +426,8 @@ retry:
                 if (StudioListener.ListenerCount <= 0 && !listenerWarningIssued)
                 {
                     listenerWarningIssued = true;
-                    RuntimeUtils.DebugLogWarning("[FMOD] Please add an 'FMOD Studio Listener' component to your a camera in the scene for correct 3D positioning of sounds.");
+                    RuntimeUtils.DebugLogWarning(
+                        "[FMOD] Please add an 'FMOD Studio Listener' component to your a camera in the scene for correct 3D positioning of sounds.");
                 }
 
                 StudioEventEmitter.UpdateActiveEmitters();
@@ -423,7 +442,7 @@ retry:
 
                     if (playbackState == FMOD.Studio.PLAYBACK_STATE.STOPPED ||
                         attachedInstances[i].transform == null // destroyed game object
-                        )
+                       )
                     {
                         attachedInstances[i] = attachedInstances[attachedInstances.Count - 1];
                         attachedInstances.RemoveAt(attachedInstances.Count - 1);
@@ -431,26 +450,31 @@ retry:
                         continue;
                     }
 
-                    #if UNITY_PHYSICS_EXIST
+#if UNITY_PHYSICS_EXIST
                     if (attachedInstances[i].rigidBody)
                     {
-                        attachedInstances[i].instance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform, attachedInstances[i].rigidBody));
+                        attachedInstances[i].instance
+                            .set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform,
+                                attachedInstances[i].rigidBody));
                     }
                     else
-                    #endif
-                    #if UNITY_PHYSICS2D_EXIST
+#endif
+#if UNITY_PHYSICS2D_EXIST
                     if (attachedInstances[i].rigidBody2D)
                     {
-                        attachedInstances[i].instance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform, attachedInstances[i].rigidBody2D));
+                        attachedInstances[i].instance
+                            .set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform,
+                                attachedInstances[i].rigidBody2D));
                     }
                     else
-                    #endif
+#endif
                     {
-                        attachedInstances[i].instance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform));
+                        attachedInstances[i].instance
+                            .set3DAttributes(RuntimeUtils.To3DAttributes(attachedInstances[i].transform));
                     }
                 }
 
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 ApplyMuteState();
 
                 for (int i = eventPositionWarnings.Count - 1; i >= 0; i--)
@@ -467,14 +491,17 @@ retry:
                             FMOD.Studio.EventDescription desc;
                             eventPositionWarnings[i].getDescription(out desc);
                             desc.getPath(out path);
-                            RuntimeUtils.DebugLogWarningFormat("[FMOD] Instance of Event {0} has not had EventInstance.set3DAttributes() called on it yet!", path);
+                            RuntimeUtils.DebugLogWarningFormat(
+                                "[FMOD] Instance of Event {0} has not had EventInstance.set3DAttributes() called on it yet!",
+                                path);
                         }
                     }
+
                     eventPositionWarnings.RemoveAt(i);
                 }
 
                 isOverlayEnabled = currentPlatform.IsOverlayEnabled;
-                #endif
+#endif
 
                 if (isOverlayEnabled)
                 {
@@ -499,9 +526,11 @@ retry:
                 studioSystem.update();
             }
         }
+
         public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform)
         {
-            AttachedInstance attachedInstance = Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
+            AttachedInstance attachedInstance =
+                Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
             if (attachedInstance == null)
             {
                 attachedInstance = new AttachedInstance();
@@ -513,10 +542,12 @@ retry:
             attachedInstance.instance = instance;
         }
 
-        #if UNITY_PHYSICS_EXIST
-        public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, Rigidbody rigidBody)
+#if UNITY_PHYSICS_EXIST
+        public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform,
+            Rigidbody rigidBody)
         {
-            AttachedInstance attachedInstance = Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
+            AttachedInstance attachedInstance =
+                Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
             if (attachedInstance == null)
             {
                 attachedInstance = new AttachedInstance();
@@ -528,12 +559,14 @@ retry:
             attachedInstance.instance = instance;
             attachedInstance.rigidBody = rigidBody;
         }
-        #endif
+#endif
 
-        #if UNITY_PHYSICS2D_EXIST
-        public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, Rigidbody2D rigidBody2D)
+#if UNITY_PHYSICS2D_EXIST
+        public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform,
+            Rigidbody2D rigidBody2D)
         {
-            AttachedInstance attachedInstance = Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
+            AttachedInstance attachedInstance =
+                Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
             if (attachedInstance == null)
             {
                 attachedInstance = new AttachedInstance();
@@ -545,7 +578,7 @@ retry:
             attachedInstance.instance = instance;
             attachedInstance.rigidBody2D = rigidBody2D;
         }
-        #endif
+#endif
 
         public static void DetachInstanceFromGameObject(FMOD.Studio.EventInstance instance)
         {
@@ -569,12 +602,12 @@ retry:
             }
         }
 
-        #if !UNITY_EDITOR
+#if !UNITY_EDITOR
         private void Start()
         {
             isOverlayEnabled = currentPlatform.IsOverlayEnabled;
         }
-        #endif
+#endif
 
         private void DrawDebugOverlay(int windowID)
         {
@@ -616,6 +649,7 @@ retry:
                     {
                         rms += outputMetering.rmslevel[i] * outputMetering.rmslevel[i];
                     }
+
                     rms = Mathf.Sqrt(rms / (float)outputMetering.numchannels);
 
                     float db = rms > 0 ? 20.0f * Mathf.Log10(rms * Mathf.Sqrt(2.0f)) : -80.0f;
@@ -668,12 +702,13 @@ retry:
                 {
                     OnDestroy(); // When domain reload is disabled, OnDestroy is not called when entering play mode, breaking live update.
                 }
+
                 Destroy();
             }
         }
 #endif
 
-        #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
         [AOT.MonoPInvokeCallback(typeof(Action<bool>))]
         private static void HandleInterrupt(bool began)
         {
@@ -693,7 +728,7 @@ retry:
                 }
             }
         }
-        #else
+#else
         private void OnApplicationPause(bool pauseStatus)
         {
             if (studioSystem.isValid())
@@ -710,9 +745,10 @@ retry:
                 }
             }
         }
-        #endif
+#endif
 
-        private void loadedBankRegister(LoadedBank loadedBank, string bankPath, string bankName, bool loadSamples, FMOD.RESULT loadResult)
+        private void loadedBankRegister(LoadedBank loadedBank, string bankPath, string bankName, bool loadSamples,
+            FMOD.RESULT loadResult)
         {
             LoadingBanksRef--;
             if (loadResult == FMOD.RESULT.OK)
@@ -728,7 +764,9 @@ retry:
             }
             else if (loadResult == FMOD.RESULT.ERR_EVENT_ALREADY_LOADED)
             {
-                RuntimeUtils.DebugLogWarningFormat("[FMOD] Unable to load {0} - bank already loaded. This may occur when attempting to load another localized bank before the first is unloaded, or if a bank has been loaded via the API.", bankName);
+                RuntimeUtils.DebugLogWarningFormat(
+                    "[FMOD] Unable to load {0} - bank already loaded. This may occur when attempting to load another localized bank before the first is unloaded, or if a bank has been loaded via the API.",
+                    bankName);
             }
             else
             {
@@ -774,7 +812,8 @@ retry:
             loadWebResult = www.downloadHandler.data;
 
             LoadedBank loadedBank = new LoadedBank();
-            loadResult = Instance.studioSystem.loadBankMemory(loadWebResult, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
+            loadResult =
+ Instance.studioSystem.loadBankMemory(loadWebResult, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
             if (loadResult != FMOD.RESULT.OK)
             {
                 RuntimeUtils.DebugLogWarningFormat("[FMOD] loadFromWeb.  Path = {0}, result = {1}.", bankPath, loadResult);
@@ -796,6 +835,7 @@ retry:
                 {
                     loadedBank.Bank.loadSampleData();
                 }
+
                 Instance.loadedBanks[bankName] = loadedBank;
             }
             else
@@ -805,7 +845,8 @@ retry:
 #if !UNITY_EDITOR
                 if (!string.IsNullOrEmpty(Settings.Instance.TargetSubFolder))
                 {
-                    bankFolder = RuntimeUtils.GetCommonPlatformPath(Path.Combine(bankFolder, Settings.Instance.TargetSubFolder));
+                    bankFolder =
+ RuntimeUtils.GetCommonPlatformPath(Path.Combine(bankFolder, Settings.Instance.TargetSubFolder));
                 }
 #endif
 
@@ -821,23 +862,25 @@ retry:
                 {
                     bankPath = string.Format("{0}/{1}", bankFolder, bankName);
                 }
+
                 Instance.LoadingBanksRef++;
-                #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
                 if (Settings.Instance.AndroidUseOBB)
                 {
                     Instance.StartCoroutine(Instance.loadFromWeb(bankPath, bankName, loadSamples));
                 }
                 else
-                #elif UNITY_WEBGL && !UNITY_EDITOR
+#elif UNITY_WEBGL && !UNITY_EDITOR
                 if (true)
                 {
                     Instance.StartCoroutine(Instance.loadFromWeb(bankPath, bankName, loadSamples));
                 }
                 else
-                #endif // (UNITY_ANDROID || UNITY_WEBGL) && !UNITY_EDITOR
+#endif // (UNITY_ANDROID || UNITY_WEBGL) && !UNITY_EDITOR
                 {
                     LoadedBank loadedBank = new LoadedBank();
-                    FMOD.RESULT loadResult = Instance.studioSystem.loadBankFile(bankPath, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
+                    FMOD.RESULT loadResult = Instance.studioSystem.loadBankFile(bankPath,
+                        FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
                     Instance.loadedBankRegister(loadedBank, bankPath, bankName, loadSamples, loadResult);
                 }
             }
@@ -855,6 +898,7 @@ retry:
                 {
                     loadedBank.Bank.loadSampleData();
                 }
+
                 Instance.loadedBanks[bankName] = loadedBank;
             }
             else
@@ -869,7 +913,8 @@ retry:
 #endif
 
                 LoadedBank loadedBank = new LoadedBank();
-                FMOD.RESULT loadResult = Instance.studioSystem.loadBankMemory(asset.bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
+                FMOD.RESULT loadResult = Instance.studioSystem.loadBankMemory(asset.bytes,
+                    FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out loadedBank.Bank);
 
                 if (loadResult == FMOD.RESULT.OK)
                 {
@@ -883,7 +928,9 @@ retry:
                 }
                 else if (loadResult == FMOD.RESULT.ERR_EVENT_ALREADY_LOADED)
                 {
-                    RuntimeUtils.DebugLogWarningFormat("[FMOD] Unable to load {0} - bank already loaded. This may occur when attempting to load another localized bank before the first is unloaded, or if a bank has been loaded via the API.", bankName);
+                    RuntimeUtils.DebugLogWarningFormat(
+                        "[FMOD] Unable to load {0} - bank already loaded. This may occur when attempting to load another localized bank before the first is unloaded, or if a bank has been loaded via the API.",
+                        bankName);
                 }
                 else
                 {
@@ -892,8 +939,9 @@ retry:
             }
         }
 
-        #if UNITY_ADDRESSABLES_EXIST
-        public static void LoadBank(AssetReference assetReference, bool loadSamples = false, System.Action completionCallback = null)
+#if UNITY_ADDRESSABLES_EXIST
+        public static void LoadBank(AssetReference assetReference, bool loadSamples =
+ false, System.Action completionCallback = null)
         {
             if (loadSamples || completionCallback != null)
             {
@@ -929,7 +977,7 @@ retry:
             TextAsset bank = obj.Result;
             LoadBank(bank, loadSamples);
         }
-        #endif
+#endif
 
         private void LoadBanks(Settings fmodSettings)
         {
@@ -971,6 +1019,7 @@ retry:
                     {
                         yield return bank;
                     }
+
                     break;
                 case BankLoadType.Specified:
                     foreach (var bank in fmodSettings.BanksToLoad)
@@ -980,6 +1029,7 @@ retry:
                             yield return bank;
                         }
                     }
+
                     break;
                 case BankLoadType.None:
                     break;
@@ -1001,6 +1051,7 @@ retry:
                     Instance.sampleLoadRequests.Remove(bankName);
                     return;
                 }
+
                 Instance.loadedBanks[bankName] = loadedBank;
             }
         }
@@ -1020,6 +1071,7 @@ retry:
                 bank.Bank.getSampleLoadingState(out loadingState);
                 loading |= (loadingState == FMOD.Studio.LOADING_STATE.LOADING);
             }
+
             return loading;
         }
 
@@ -1049,6 +1101,7 @@ retry:
                     throw new EventNotFoundException(path);
                 }
             }
+
             return guid;
         }
 
@@ -1090,7 +1143,7 @@ retry:
             {
                 return CreateInstance(PathToGUID(path));
             }
-            catch(EventNotFoundException)
+            catch (EventNotFoundException)
             {
                 // Switch from exception with GUID to exception with path
                 throw new EventNotFoundException(path);
@@ -1103,7 +1156,7 @@ retry:
             FMOD.Studio.EventInstance newInstance;
             eventDesc.createInstance(out newInstance);
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             bool is3D = false;
             eventDesc.is3D(out is3D);
             if (is3D)
@@ -1112,7 +1165,7 @@ retry:
                 newInstance.set3DAttributes(RuntimeUtils.To3DAttributes(new Vector3(1e+18F, 1e+18F, 1e+18F)));
                 instance.eventPositionWarnings.Add(newInstance);
             }
-            #endif
+#endif
 
             return newInstance;
         }
@@ -1176,13 +1229,13 @@ retry:
         public static void PlayOneShotAttached(FMOD.GUID guid, GameObject gameObject)
         {
             var instance = CreateInstance(guid);
-            #if UNITY_PHYSICS_EXIST
+#if UNITY_PHYSICS_EXIST
             AttachInstanceToGameObject(instance, gameObject.transform, gameObject.GetComponent<Rigidbody>());
-            #elif UNITY_PHYSICS2D_EXIST
+#elif UNITY_PHYSICS2D_EXIST
             AttachInstanceToGameObject(instance, gameObject.transform, gameObject.GetComponent<Rigidbody2D>());
-            #else
+#else
             AttachInstanceToGameObject(instance, gameObject.transform);
-            #endif
+#endif
             instance.start();
             instance.release();
         }
@@ -1232,43 +1285,54 @@ retry:
                     Instance.cachedDescriptions[guid] = eventDesc;
                 }
             }
+
             return eventDesc;
         }
 
 #if UNITY_PHYSICS_EXIST
-        public static void SetListenerLocation(GameObject gameObject, Rigidbody rigidBody, GameObject attenuationObject = null)
+        public static void SetListenerLocation(GameObject gameObject, Rigidbody rigidBody,
+            GameObject attenuationObject = null)
         {
             SetListenerLocation(0, gameObject, rigidBody, attenuationObject);
         }
 
-        public static void SetListenerLocation(int listenerIndex, GameObject gameObject, Rigidbody rigidBody, GameObject attenuationObject = null)
+        public static void SetListenerLocation(int listenerIndex, GameObject gameObject, Rigidbody rigidBody,
+            GameObject attenuationObject = null)
         {
-            if(attenuationObject)
+            if (attenuationObject)
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody), RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody),
+                    RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
             }
             else
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody));
             }
         }
 #endif
 
 #if UNITY_PHYSICS2D_EXIST
-        public static void SetListenerLocation(GameObject gameObject, Rigidbody2D rigidBody2D, GameObject attenuationObject = null)
+        public static void SetListenerLocation(GameObject gameObject, Rigidbody2D rigidBody2D,
+            GameObject attenuationObject = null)
         {
             SetListenerLocation(0, gameObject, rigidBody2D, attenuationObject);
         }
 
-        public static void SetListenerLocation(int listenerIndex, GameObject gameObject, Rigidbody2D rigidBody2D, GameObject attenuationObject = null)
+        public static void SetListenerLocation(int listenerIndex, GameObject gameObject, Rigidbody2D rigidBody2D,
+            GameObject attenuationObject = null)
         {
             if (attenuationObject)
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody2D), RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody2D),
+                    RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
             }
             else
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody2D));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform, rigidBody2D));
             }
         }
 #endif
@@ -1276,17 +1340,21 @@ retry:
         public static void SetListenerLocation(GameObject gameObject, GameObject attenuationObject = null)
         {
             SetListenerLocation(0, gameObject, attenuationObject);
-        }       
-        
-        public static void SetListenerLocation(int listenerIndex, GameObject gameObject, GameObject attenuationObject = null)
+        }
+
+        public static void SetListenerLocation(int listenerIndex, GameObject gameObject,
+            GameObject attenuationObject = null)
         {
             if (attenuationObject)
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform), RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform),
+                    RuntimeUtils.ToFMODVector(attenuationObject.transform.position));
             }
             else
             {
-                Instance.studioSystem.setListenerAttributes(listenerIndex, RuntimeUtils.To3DAttributes(gameObject.transform));
+                Instance.studioSystem.setListenerAttributes(listenerIndex,
+                    RuntimeUtils.To3DAttributes(gameObject.transform));
             }
         }
 
@@ -1297,6 +1365,7 @@ retry:
             {
                 throw new BusNotFoundException(path);
             }
+
             return bus;
         }
 
@@ -1307,6 +1376,7 @@ retry:
             {
                 throw new VCANotFoundException(path);
             }
+
             return vca;
         }
 
@@ -1336,29 +1406,23 @@ retry:
                 FMOD.Studio.Bus masterBus;
                 if (StudioSystem.getBus("bus:/", out masterBus) == FMOD.RESULT.OK)
                 {
-                    #if UNITY_EDITOR
+#if UNITY_EDITOR
                     masterBus.setMute(Instance.isMuted || EditorUtility.audioMasterMute);
-                    #else
+#else
                     masterBus.setMute(Instance.isMuted);
-                    #endif
+#endif
                 }
             }
         }
 
         public static bool IsInitialized
         {
-            get
-            {
-                return instance != null && instance.studioSystem.isValid();
-            }
+            get { return instance != null && instance.studioSystem.isValid(); }
         }
 
         public static bool HaveAllBanksLoaded
         {
-            get
-            {
-                return Instance.LoadingBanksRef == 0;
-            }
+            get { return Instance.LoadingBanksRef == 0; }
         }
 
         public static bool HaveMasterBanksLoaded
@@ -1366,10 +1430,11 @@ retry:
             get
             {
                 var banks = Settings.Instance.MasterBanks;
-                foreach(var bank in banks)
+                foreach (var bank in banks)
                 {
                     if (!HasBankLoaded(bank)) return false;
                 }
+
                 return true;
             }
         }

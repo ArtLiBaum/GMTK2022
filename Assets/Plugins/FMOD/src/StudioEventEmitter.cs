@@ -36,9 +36,15 @@ namespace FMODUnity
 
         private const string SnapshotString = "snapshot";
 
-        public FMOD.Studio.EventDescription EventDescription { get { return eventDescription; } }
+        public FMOD.Studio.EventDescription EventDescription
+        {
+            get { return eventDescription; }
+        }
 
-        public FMOD.Studio.EventInstance EventInstance { get { return instance; } }
+        public FMOD.Studio.EventInstance EventInstance
+        {
+            get { return instance; }
+        }
 
         public bool IsActive { get; private set; }
 
@@ -87,7 +93,7 @@ namespace FMODUnity
         {
             // If at least once listener is within the max distance, ensure an event instance is playing
             bool playInstance = StudioListener.DistanceToNearestListener(transform.position) <= MaxDistance;
-            
+
             if (force || playInstance != IsPlaying())
             {
                 if (playInstance)
@@ -101,7 +107,7 @@ namespace FMODUnity
             }
         }
 
-        protected override void Start() 
+        protected override void Start()
         {
             RuntimeUtils.EnforceLibraryOrder();
             if (Preload)
@@ -149,6 +155,7 @@ namespace FMODUnity
             {
                 Play();
             }
+
             if (StopEvent == gameEvent)
             {
                 Stop();
@@ -212,7 +219,7 @@ namespace FMODUnity
                 PlayInstance();
             }
         }
-        
+
         private void PlayInstance()
         {
             if (!instance.isValid())
@@ -367,6 +374,7 @@ namespace FMODUnity
                 instance.getPlaybackState(out playbackState);
                 return (playbackState != FMOD.Studio.PLAYBACK_STATE.STOPPED);
             }
+
             return false;
         }
     }
