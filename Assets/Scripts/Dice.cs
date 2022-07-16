@@ -9,13 +9,17 @@ public class Dice : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private Vector3 _initialPos;
-    private bool thrown, landed;
+    private bool _thrown;
 
-    public bool Landed => landed;
+    public bool Landed { get; private set; }
 
-   [SerializeField] private int diceValue;
+    [SerializeField] private int diceValue;
+   public int DiceValue => diceValue;
 
-    private DiceSide[] sides; 
+    private DiceSide[] _sides;
+
+    private void OnEnable() => DiceManager.allDice.Add(this);
+    private void OnDisable() => DiceManager.allDice.Remove(this);
 
     // Start is called before the first frame update
     void Start()
@@ -23,21 +27,22 @@ public class Dice : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _initialPos = transform.position;
         _rigidbody.useGravity = false;
-        sides = GetComponentsInChildren<DiceSide>();
+        _sides = GetComponentsInChildren<DiceSide>();
     }
 
     private void Update()
     {
         //if has landed correctly
-        if (_rigidbody.IsSleeping() && !landed && thrown)
+        if (_rigidbody.IsSleeping() && !Landed && _thrown)
         {
-            landed = true;
+            Landed = true;
+            DiceManager.Landed();
             _rigidbody.useGravity = false;
             SideValueCheck();
         }
         
         //if has landed incorrectly and not on a side
-        if (_rigidbody.IsSleeping() && landed && diceValue == 0)
+        if (_rigidbody.IsSleeping() && Landed && diceValue == 0)
         {
             Reset();
             RollDice();
@@ -46,9 +51,9 @@ public class Dice : MonoBehaviour
 
     public void RollDice()
     {
-        if (!thrown && !landed)
+        if (!_thrown && !Landed)
         {
-            thrown = true;
+            _thrown = true;
             _rigidbody.useGravity = true;
             _rigidbody.AddTorque(Random.Range(0,500),Random.Range(0,500),Random.Range(0,500));
         }
@@ -57,20 +62,18 @@ public class Dice : MonoBehaviour
     public void Reset()
     {
         transform.position = _initialPos;
-        thrown = landed = false;
+        _thrown = Landed = false;
         _rigidbody.useGravity = false;
     }
 
-    public int SideValueCheck()
+    private int SideValueCheck()
     {
         diceValue = 0;
-        foreach (var side in sides)
+        foreach (var side in _sides)
         {
-            if (side.OnGround)
-            {
-                diceValue = side.SideValue;
-                return diceValue;
-            }
+            if (!side.OnGround) continue;
+            diceValue = side.SideValue;
+            return diceValue;
         }
 
         return 0;
