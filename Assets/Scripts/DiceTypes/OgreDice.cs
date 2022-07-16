@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class OgreDice : PlayerDice
 {
     [SerializeField] int powerUp = 0;
@@ -13,6 +14,7 @@ public class OgreDice : PlayerDice
 
     protected override int SideValueCheck()
     {
+        
         base.SideValueCheck();
         return diceValue += powerUp;
     }

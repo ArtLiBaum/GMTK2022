@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerDice : Dice
 {
-    private void OnEnable() => DiceManager.allDice.Add(this);
-    private void OnDisable() => DiceManager.allDice.Remove(this);
+    private void OnEnable() => DiceManager.instance.allDice.Add(this);
+    //private void OnDisable() => DiceManager.allDice.Remove(this);
 
     [SerializeField] protected string description;
     

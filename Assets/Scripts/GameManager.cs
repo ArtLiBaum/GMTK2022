@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> enemyDiceQueue;
     private int enemyIndex = 0;
     [SerializeField] private Transform EnemySpawn;
-    [SerializeField] private List<Transform> PlayerSpawns = new List<Transform>();
+ 
     
     
     public static EnemyDice currentEnemy;
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         _RollDisplay.gameObject.SetActive(false);
         _diceManager = FindObjectOfType<DiceManager>();
         //TEMP FOR TESTING
-        StartCoroutine(BattlePhase());
+        //StartCoroutine(BattlePhase());
     }
 
     int CheckRollOutcome()
@@ -79,19 +79,32 @@ public class GameManager : MonoBehaviour
         _diceManager.ResetAllDice();
         currentEnemy.Reset();
     }
-    
+
+    void KillEnemy()
+    {
+        Destroy(currentEnemy.gameObject);
+        ++enemyIndex;
+    }
+
+    public void StartBattle()
+    {
+        //Called after Player Chooses Dice
+        StartCoroutine(BattlePhase());
+    }
 
    public IEnumerator BattlePhase()
     {
-        //Enemy Displayed
-          //TODO: EnemyDisplay
-        
-        //Player Chooses Dice
-          //TODO: Dice Selection
-        
+        goto FirstRound;
+
         RestartRound:
         _diceManager.ActivateSpecials();
+
+        FirstRound:
+        _diceManager.NewRound();
         CurrentEnemy.RollDice();
+        
+        
+        
         //Enemy Rolls its Damage
         while (!CurrentEnemy.Landed)
         {
@@ -100,6 +113,7 @@ public class GameManager : MonoBehaviour
         
         _RollPanel.SetActive(true);
         _RollDisplay.gameObject.SetActive(true);
+        
         //Player Rolls Dice
         while (!DiceManager.Rolling)
         {
@@ -115,15 +129,14 @@ public class GameManager : MonoBehaviour
         _RollDisplay.gameObject.SetActive(false);
 
         // Dice Value is checked against Enemy Stats
-        
-        // One of three results
+         // One of three results
         switch (CheckRollOutcome())
         {
-            case 0: break;
             case -1 : //player takes damage
                playerHealth -= currentEnemy.DiceValue;
                 Debug.Log("Player Lost Round");
                 break;
+            case 0: //meets it beats it
             case 1: //enemy takes hit
                 currentEnemy.TakeDamage();
                 Debug.Log("Enemy Lost Round");
@@ -143,11 +156,14 @@ public class GameManager : MonoBehaviour
         // Enemy Dies
         if (!currentEnemy.IsAlive())
         {
+            //TODO: Load Next Sequence
+            KillEnemy();
             Debug.Log("EnemyDefeated");
         }
         // Player Dies
         if (playerHealth <= 0)
         {
+            //TODO GAME OVER SCREEN
             Debug.Log("GameOver");
         }
     }
