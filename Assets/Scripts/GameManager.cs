@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private static TMP_Text _RollDisplay;
     private GameObject _RollPanel;
     private Button _RollButton;
+    private BattleDisplay _battleDisplay;
     [SerializeField] private List<GameObject> enemyDiceQueue;
     private int enemyIndex = 0;
     [SerializeField] private Transform EnemySpawn;
@@ -20,7 +21,8 @@ public class GameManager : MonoBehaviour
     private GameObject diceSelect;
     private EnemyDisplay _enemyDisplay;
 
-    private int playerHealth = 5;
+    private static int _playerHealth = 5;
+    public static int PlayerHealth => _playerHealth;
     public EnemyDice CurrentEnemy
     {
         get
@@ -48,12 +50,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private static int _health;
 
     private void Start()
     {
         _diceManager = FindObjectOfType<DiceManager>();
-        
+        _battleDisplay = FindObjectOfType<BattleDisplay>();
         GameObject combat = GameObject.Find("CombatHud");
         
         _enemyDisplay = FindObjectOfType<EnemyDisplay>();
@@ -62,14 +63,15 @@ public class GameManager : MonoBehaviour
         diceSelect.transform.Find("StartButton").GetComponent<Button>().onClick.AddListener(StartBattle);
         diceSelect.SetActive(false);
         
-        _RollPanel = combat.transform.Find("BattlePanel/RollPanel").gameObject;
-        _RollButton = _RollPanel.transform.Find("RollButton").GetComponent<Button>();
-        _RollButton.onClick.AddListener(_diceManager.RollAllDice);
-        _RollDisplay = combat.transform.Find("BattlePanel/RollDisplay").GetComponent<TMP_Text>();
+        _RollPanel = _battleDisplay.RollPanel;
+        _RollButton = _battleDisplay.RollButton;
+        _RollDisplay = _battleDisplay.RollDisplay;
         
         _RollPanel.SetActive(false);
         _RollDisplay.gameObject.SetActive(false);
-        
+
+
+        _playerHealth = 5;
 
         //TEMP FOR TESTING
         StartCoroutine(PreBattle());
@@ -121,14 +123,10 @@ public class GameManager : MonoBehaviour
 
    public IEnumerator BattlePhase()
     {
-        goto FirstRound;
         RestartRound:
         _diceManager.ActivateSpecials();
-
-        FirstRound:
         _diceManager.NewRound();
         CurrentEnemy.RollDice();
-        
         
         
         //Enemy Rolls its Damage
@@ -159,21 +157,24 @@ public class GameManager : MonoBehaviour
         switch (CheckRollOutcome())
         {
             case -1 : //player takes damage
-               playerHealth -= currentEnemy.DiceValue;
+               _playerHealth -= currentEnemy.DiceValue;
+               _battleDisplay.UpdatePlayerHealth();
                 Debug.Log("Player Lost Round");
                 break;
             case 0: //meets it beats it
             case 1: //enemy takes hit
                 currentEnemy.TakeDamage();
+                _battleDisplay.UpdateEnemyHits(CurrentEnemy);
                 Debug.Log("Enemy Lost Round");
                 break;
             case 2: // Enemy it taken out
                 currentEnemy.KnockedOut();
+                _battleDisplay.UpdateEnemyHits(CurrentEnemy);
                 Debug.Log("Enemy Was TKO'd!");
                 break;
         }
         // Enemy & Player both alive, go to Enemy's Rolls
-        if (currentEnemy.IsAlive() && playerHealth > 0)
+        if (currentEnemy.IsAlive() && _playerHealth > 0)
         {
             _diceManager.ActivatePowerUps();
             Restart();
@@ -187,7 +188,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("EnemyDefeated");
         }
         // Player Dies
-        if (playerHealth <= 0)
+        if (_playerHealth <= 0)
         {
             //TODO GAME OVER SCREEN
             Debug.Log("GameOver");
