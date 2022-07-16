@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class DiceManager : MonoBehaviour
 {
-    public static List<Dice> allDice = new List<Dice>();
+    public static List<PlayerDice> allDice = new List<PlayerDice>();
     private static int numLanded = 0;
     private static int rollTotal = 0;
     public static void Landed() => ++numLanded;
     private static bool rolling = false;
     public static bool Rolling =>rolling;
+
+    public static bool SpecialsBlocked = false;
 
     private void Start()
     {
@@ -28,7 +30,6 @@ public class DiceManager : MonoBehaviour
         {
             dice.RollDice();
         }
-        
     }
 
     public void ResetAllDice()
@@ -36,6 +37,26 @@ public class DiceManager : MonoBehaviour
         foreach (var dice in allDice)
         {
             dice.Reset();
+        }
+        rolling = false;
+    }
+
+    public void ActivateSpecials()
+    {
+        if(SpecialsBlocked) return;
+        
+        foreach (var dice in allDice)
+        {
+            dice.SpecialAbility();
+        }
+    }
+
+    public void ActivatePowerUps()
+    {
+        if(SpecialsBlocked) return;
+        foreach (var dice in allDice)
+        {
+            dice.RoundUpGrade();
         }
     }
 

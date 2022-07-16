@@ -29,3 +29,9 @@ public class DiceEditor : Editor
 
     }
 }
+
+[CustomEditor(typeof(EnemyDice))]
+public class EnemyDiceEditor : DiceEditor
+{
+    
+}

@@ -3,11 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.UI;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static int LastRoll = 0;
-    [SerializeField] private static TMP_Text _RollDisplay;
+    private static TMP_Text _RollDisplay;
+    private GameObject _RollPanel;
+    private Button _RollButton;
+    [SerializeField] private List<GameObject> enemyDiceQueue;
+    private int enemyIndex = 0;
+    [SerializeField] private Transform EnemySpawn;
+    [SerializeField] private List<Transform> PlayerSpawns = new List<Transform>();
+    
+    
+    public static EnemyDice currentEnemy;
+    private DiceManager _diceManager;
+
+    private int playerHealth = 5;
+    public EnemyDice CurrentEnemy
+    {
+        get
+        {
+            if (currentEnemy == null)
+            {
+               
+                currentEnemy = Instantiate(enemyDiceQueue[enemyIndex],EnemySpawn).GetComponent<EnemyDice>();
+            }
+
+            return currentEnemy;
+        }
+        set => currentEnemy = value;
+    }
+    
 
     private static int rollResult;
     public static int RollResult
@@ -24,6 +52,103 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _RollPanel = GameObject.Find("RollPanel");
+        _RollButton = _RollPanel.transform.Find("RollButton").GetComponent<Button>();
         _RollDisplay = GameObject.Find("RollDisplay").GetComponent<TMP_Text>();
+        
+        _RollPanel.SetActive(false);
+        _RollDisplay.gameObject.SetActive(false);
+        _diceManager = FindObjectOfType<DiceManager>();
+        //TEMP FOR TESTING
+        StartCoroutine(BattlePhase());
+    }
+
+    int CheckRollOutcome()
+    {
+        if (rollResult < currentEnemy.Toughness)
+            return -1;
+        if (rollResult > currentEnemy.Toughness)
+        {
+            return rollResult > currentEnemy.TKO ? 2 : 1;
+        }
+        return 0;
+    }
+
+    void Restart()
+    {
+        _diceManager.ResetAllDice();
+        currentEnemy.Reset();
+    }
+    
+
+   public IEnumerator BattlePhase()
+    {
+        //Enemy Displayed
+          //TODO: EnemyDisplay
+        
+        //Player Chooses Dice
+          //TODO: Dice Selection
+        
+        RestartRound:
+        _diceManager.ActivateSpecials();
+        CurrentEnemy.RollDice();
+        //Enemy Rolls its Damage
+        while (!CurrentEnemy.Landed)
+        {
+            yield return null;//wait for enemy dice to resolve
+        }
+        
+        _RollPanel.SetActive(true);
+        _RollDisplay.gameObject.SetActive(true);
+        //Player Rolls Dice
+        while (!DiceManager.Rolling)
+        {
+            yield return null;
+        }
+        _RollPanel.SetActive(false);
+        while (DiceManager.Rolling)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+        _RollDisplay.gameObject.SetActive(false);
+
+        // Dice Value is checked against Enemy Stats
+        
+        // One of three results
+        switch (CheckRollOutcome())
+        {
+            case 0: break;
+            case -1 : //player takes damage
+               playerHealth -= currentEnemy.DiceValue;
+                Debug.Log("Player Lost Round");
+                break;
+            case 1: //enemy takes hit
+                currentEnemy.TakeDamage();
+                Debug.Log("Enemy Lost Round");
+                break;
+            case 2: // Enemy it taken out
+                currentEnemy.KnockedOut();
+                Debug.Log("Enemy Was TKO'd!");
+                break;
+        }
+        // Enemy & Player both alive, go to Enemy's Rolls
+        if (currentEnemy.IsAlive() && playerHealth > 0)
+        {
+            _diceManager.ActivatePowerUps();
+            Restart();
+            goto RestartRound;
+        }
+        // Enemy Dies
+        if (!currentEnemy.IsAlive())
+        {
+            Debug.Log("EnemyDefeated");
+        }
+        // Player Dies
+        if (playerHealth <= 0)
+        {
+            Debug.Log("GameOver");
+        }
     }
 }

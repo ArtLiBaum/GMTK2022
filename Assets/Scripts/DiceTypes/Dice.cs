@@ -13,20 +13,25 @@ public class Dice : MonoBehaviour
 
     public bool Landed { get; private set; }
 
-    [SerializeField] private int diceValue;
+    [SerializeField] protected int diceValue = -1;
    public int DiceValue => diceValue;
 
     private DiceSide[] _sides;
 
-    private void OnEnable() => DiceManager.allDice.Add(this);
-    private void OnDisable() => DiceManager.allDice.Remove(this);
-
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
+    {
+        if (_rigidbody == null)
+        {
+            Initialize();
+            _rigidbody.useGravity = false;
+        }
+    }
+
+    void Initialize()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _initialPos = transform.position;
-        _rigidbody.useGravity = false;
         _sides = GetComponentsInChildren<DiceSide>();
     }
 
@@ -42,7 +47,7 @@ public class Dice : MonoBehaviour
         }
         
         //if has landed incorrectly and not on a side
-        if (_rigidbody.IsSleeping() && Landed && diceValue == 0)
+        if (_rigidbody.IsSleeping() && Landed && diceValue == -1)
         {
             Reset();
             RollDice();
@@ -53,7 +58,13 @@ public class Dice : MonoBehaviour
     {
         if (!_thrown && !Landed)
         {
+            diceValue = -1;
             _thrown = true;
+            if (_rigidbody == null)
+            {
+                Initialize();
+            }
+
             _rigidbody.useGravity = true;
             _rigidbody.AddTorque(Random.Range(0,500),Random.Range(0,500),Random.Range(0,500));
         }
@@ -66,7 +77,7 @@ public class Dice : MonoBehaviour
         _rigidbody.useGravity = false;
     }
 
-    private int SideValueCheck()
+    protected virtual int SideValueCheck()
     {
         diceValue = 0;
         foreach (var side in _sides)
