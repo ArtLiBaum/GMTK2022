@@ -275,6 +275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceValue: 0
+  portrait: {fileID: 8147546942830732012, guid: 479a9586c81bc5543a14963b90eef981, type: 3}
+  enemyName: Bone Pile
   hits: 3
   toughness: 18
   tko: 30

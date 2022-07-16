@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   diceValue: 0
+  portrait: {fileID: 2787526151900407612, guid: 479a9586c81bc5543a14963b90eef981, type: 3}
+  enemyName: Slime
   hits: 2
   toughness: 13
   tko: 20

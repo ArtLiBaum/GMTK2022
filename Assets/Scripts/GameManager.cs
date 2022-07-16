@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     public static EnemyDice currentEnemy;
     private DiceManager _diceManager;
 
-    private GameObject enemyDisplay, diceSelect;
+    private GameObject diceSelect;
+    private EnemyDisplay _enemyDisplay;
 
     private int playerHealth = 5;
     public EnemyDice CurrentEnemy
@@ -55,8 +56,8 @@ public class GameManager : MonoBehaviour
         
         GameObject combat = GameObject.Find("CombatHud");
         
-        enemyDisplay = combat.transform.Find("EnemyDisplay").gameObject;
-        enemyDisplay.SetActive(false);
+        _enemyDisplay = FindObjectOfType<EnemyDisplay>();
+        _enemyDisplay.gameObject.SetActive(false);
         diceSelect = combat.transform.Find("DiceSelection").gameObject;
         diceSelect.transform.Find("StartButton").GetComponent<Button>().onClick.AddListener(StartBattle);
         diceSelect.SetActive(false);
@@ -101,9 +102,12 @@ public class GameManager : MonoBehaviour
     {
         //Display enemy
         //TODO populate display with current enemy
-        enemyDisplay.SetActive(true);
+        
+        
+        _enemyDisplay.gameObject.SetActive(true);
+        _enemyDisplay.LoadDisplay(CurrentEnemy);
         yield return new WaitForSeconds(4f);
-        enemyDisplay.SetActive(false);
+        _enemyDisplay.gameObject.SetActive(false);
         //Give dice select option
         diceSelect.SetActive(true);
     }

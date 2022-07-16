@@ -6,7 +6,13 @@ using Unity.VisualScripting;
 
 public class EnemyDice : Dice
 {
-    private TMP_Text enemyDisplayText, enemyToughnessText;
+    private TMP_Text enemyRollDisplayText, enemyToughnessText;
+
+    [SerializeField] private Sprite portrait;
+    public Sprite Portrait => portrait;
+    [SerializeField] private string enemyName;
+    public string EnemyName => enemyName;
+    
     [SerializeField] private int hits = 2;
     public int Hits => hits;
 
@@ -20,7 +26,7 @@ public class EnemyDice : Dice
     public override void Start()
     {
         base.Start();
-        enemyDisplayText = GameObject.Find("EnemyRollDisplay").GetComponent<TMP_Text>();
+        enemyRollDisplayText = GameObject.Find("EnemyRollDisplay").GetComponent<TMP_Text>();
         enemyToughnessText = GameObject.Find("EnemyToughnessDisplay").GetComponent<TMP_Text>();
         enemyToughnessText.text = toughness.ToString();
     }
@@ -28,7 +34,7 @@ public class EnemyDice : Dice
     protected override int SideValueCheck()
     {
         base.SideValueCheck();
-        enemyDisplayText.text = DiceValue.ToString();
+        enemyRollDisplayText.text = DiceValue.ToString();
         return DiceValue;
 
     }
