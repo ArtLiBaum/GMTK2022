@@ -430,5 +430,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ogre_dice
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3451118302482216456, guid: d12e12b4da65bce4784405c7e41e9b02, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d12e12b4da65bce4784405c7e41e9b02, type: 3}

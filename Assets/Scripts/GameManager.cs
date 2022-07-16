@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.UI;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -14,11 +13,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> enemyDiceQueue;
     private int enemyIndex = 0;
     [SerializeField] private Transform EnemySpawn;
- 
-    
-    
+
     public static EnemyDice currentEnemy;
     private DiceManager _diceManager;
+
+    private GameObject enemyDisplay, diceSelect;
 
     private int playerHealth = 5;
     public EnemyDice CurrentEnemy
@@ -52,15 +51,27 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        _RollPanel = GameObject.Find("RollPanel");
+        _diceManager = FindObjectOfType<DiceManager>();
+        
+        GameObject combat = GameObject.Find("CombatHud");
+        
+        enemyDisplay = combat.transform.Find("EnemyDisplay").gameObject;
+        enemyDisplay.SetActive(false);
+        diceSelect = combat.transform.Find("DiceSelection").gameObject;
+        diceSelect.transform.Find("StartButton").GetComponent<Button>().onClick.AddListener(StartBattle);
+        diceSelect.SetActive(false);
+        
+        _RollPanel = combat.transform.Find("BattlePanel/RollPanel").gameObject;
         _RollButton = _RollPanel.transform.Find("RollButton").GetComponent<Button>();
-        _RollDisplay = GameObject.Find("RollDisplay").GetComponent<TMP_Text>();
+        _RollButton.onClick.AddListener(_diceManager.RollAllDice);
+        _RollDisplay = combat.transform.Find("BattlePanel/RollDisplay").GetComponent<TMP_Text>();
         
         _RollPanel.SetActive(false);
         _RollDisplay.gameObject.SetActive(false);
-        _diceManager = FindObjectOfType<DiceManager>();
+        
+
         //TEMP FOR TESTING
-        //StartCoroutine(BattlePhase());
+        StartCoroutine(PreBattle());
     }
 
     int CheckRollOutcome()
@@ -86,16 +97,27 @@ public class GameManager : MonoBehaviour
         ++enemyIndex;
     }
 
+    public IEnumerator PreBattle()
+    {
+        //Display enemy
+        //TODO populate display with current enemy
+        enemyDisplay.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        enemyDisplay.SetActive(false);
+        //Give dice select option
+        diceSelect.SetActive(true);
+    }
+
     public void StartBattle()
     {
         //Called after Player Chooses Dice
         StartCoroutine(BattlePhase());
+        diceSelect.SetActive(false);
     }
 
    public IEnumerator BattlePhase()
     {
         goto FirstRound;
-
         RestartRound:
         _diceManager.ActivateSpecials();
 
