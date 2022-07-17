@@ -11,33 +11,35 @@ public class PortraitToggler : MonoBehaviour
 
     public DialogueRunner Runner;
 
-    public Image MainCharPortrait;
-    public Image SecondaryCharPortrait;
+    public Image LeftPortrait;
+    public Image RightPortrait;
 
     public List<StringSpritePair> Pairs;
 
     private void Awake()
     {
-        Runner.AddCommandHandler<string>("Change_Portrait", ChangePortrait);
+        Runner.AddCommandHandler<string, bool>("Character", ChangePortrait);
 
-        MainCharPortrait.sprite = Pairs[0].MySprite;
+        LeftPortrait.sprite = Pairs[0].MySprite;
     }
 
 
-    public void ChangePortrait(string character)
+    public void ChangePortrait(string character, bool left)
     {
-        bool Me = (character == "Me");
+        LeftPortrait.gameObject.SetActive(left);
+        RightPortrait.gameObject.SetActive(!left);
 
-        MainCharPortrait.gameObject.SetActive(Me);
-        SecondaryCharPortrait.gameObject.SetActive(!Me);
+        List<string> pairStrings = Pairs.Select(x => x.CharacterName).ToList();
 
-        if (!Me)
+        if (pairStrings.Contains(character))
         {
-            List<string> pairStrings = Pairs.Select(x => x.CharacterName).ToList();
-
-            if (pairStrings.Contains(character))
+            if (left)
             {
-                SecondaryCharPortrait.sprite = Pairs[pairStrings.IndexOf(character)].MySprite;
+                LeftPortrait.sprite = Pairs[pairStrings.IndexOf(character)].MySprite;
+            }
+            else
+            {
+                RightPortrait.sprite = Pairs[pairStrings.IndexOf(character)].MySprite;
             }
         }
 

@@ -1,0 +1,18 @@
+﻿title: SlimeFightStart
+---
+<<Character Lesley false>>
+Lesley: Danny! Get me out of here!
+===
+
+title: SlimeFightDie
+---
+<<Character Lesley false>>
+Lesley: I've got you, Danny!
+
+<<Character Danny true>>
+Danny: Les!
+
+<<Character Lesley false>>
+Lesley: Just get me out of here…
+
+===

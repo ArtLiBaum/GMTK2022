@@ -1,0 +1,61 @@
+﻿title: PostTutorial
+---
+<<Character Narrator true>>
+Narrator: THE GHOST LETS OUT AN OTHERWORLDLY HOWL AND FLIES AWAY, PROBABLY TO GO PICK ON SOMETHING ELSE.
+
+<<Character Ogre false>>
+Ogre: Huzzah, sire! An impressive battle, to be sure!
+
+<<Character Danny true>>
+Maledictus: …No thanks to you.
+
+<<Character Ogre false>>
+Ogre: T'would've been unsporting to gang up on it!
+
+<<Character Nicole true>>
+Nicole: Mhmm.
+
+<<Character Ogre false>>
+Sir Thomas III: No matter! I am Sir Thomas - the third!
+
+<<Character Danny true>>
+Maledictus: Isn't that a bit of a weird name for an ogre?
+
+<<Character Narrator true>>
+Narrator: THOMAS CHUCKLES TO HIMSELF AT THE INQUIRY.
+
+<<Character Ogre false>>
+Sir Thomas III: Forsooth, there have been two other before me!
+
+<<Character Danny true>>
+Maledictus: That's fair, I suppose.
+Maledictus: What are you doing out here, though?
+
+<<Character Ogre false>>
+Sir Thomas III: Ever astute, this one! I was just on my way home from dinner when that ruffian ambushed me and threatened to take my leftovers!
+Sir Thomas III: …which are on the ground now.
+
+<<Character Danny true>>
+Maledictus: Well, do you want some company on your walk home?
+
+<<Character Ogre false>>
+Sir Thomas III: A most gracious offer! I must accept - life 'tis so much sweeter with companionship!
+
+<<Character Narrator true>>
+Narrator: YOUNG MALEDICTUS LOOKS DOWN AT HIS FEET.
+
+<<Character Danny true>>
+Maledictus: Yeah, it is.
+
+<<Character Narrator true>>
+Narrator: THE GROUP STARTS WALKING DOWN THE STREET, THOMAS LEADING THE WAY AND EXCITEDLY TALKING ABOUT HIS DINNER.
+Narrator: AT LEAST THIRTY MINUTES PASS BEFORE THOMAS FINISHES TALKING ABOUT THE APPETIZER.
+Narrator: HE'S JUST ABOUT TO BEGIN DESCRIBING THE MAIN COURSE WHEN SUDDENLY A SKELETON LEAPS OUT IN FRONT OF THE GROUP.
+
+<<Character Skeleton false>>
+Skeleton: Boo! Give me all of your food!
+
+<<Character Danny true>>
+Maledictus: Stay away from my friends!
+
+===
