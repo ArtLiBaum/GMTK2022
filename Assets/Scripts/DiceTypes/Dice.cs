@@ -95,6 +95,7 @@ public class Dice : MonoBehaviour
     {
         if (_thrown)
         {
+            SFXManager.instance.PlayDiceCollision();
             ParticleManager.Intsance.HitBurst(collision.GetContact(0).point);
         }
     }
