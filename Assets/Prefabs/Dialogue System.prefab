@@ -1449,8 +1449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Runner: {fileID: 7590503517968881171}
-  MainCharPortrait: {fileID: 7590503517051342169}
-  SecondaryCharPortrait: {fileID: 7590503518995525234}
+  LeftPortrait: {fileID: 0}
+  RightPortrait: {fileID: 0}
   Pairs:
   - CharacterName: Danny
     MySprite: {fileID: 21300000, guid: 0535ba91287abc74ca213cfa8fefcb3e, type: 3}

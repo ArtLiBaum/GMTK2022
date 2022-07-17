@@ -3,7 +3,7 @@
 <<Character Narrator true>>
 Narrator: THE SLIME MELTS AWAY AND LESLEY FALLS TO THE GROUND.
 
-<Character Danny true>>
+<Character Danny2 true>>
 Danny: Les! Are you okay?
 
 <Character Lesley false>>
@@ -16,20 +16,20 @@ Narrator: DANNY NODS.
 Lesley: Listen, it's rough that my mom's in a coma, but it's not the end of the world - and it shouldn't be for you either,
 Lesley: As long as you're here and I'm here, neither one of us will be alone.
 
-<Character Danny true>>
+<Character Danny2 true>>
 Danny: I'm sorry, Les.
 
 <Character Lesley false>>
 Lesley: I'm sorry too, I shouldn't have freaked out earlier when you said that you could talk to her.
 Lesley: I still talk to her, too.
 
-<Character Danny true>>
+<Character Danny2 true>>
 Danny: Well, do you want to go home and play another game?
 
 <<Character Narrator true>>
 Narrator: DANNY GRINS AND HOLDS UP HIS FINDINGS.
 
-<Character Danny true>>
+<Character Danny2 true>>
 Danny: And now we have some new party members!
 
 ===

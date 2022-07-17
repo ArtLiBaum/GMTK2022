@@ -1,5 +1,6 @@
 ﻿title: PostTutorial
 ---
+<<TutorialEnd>>
 <<Character Narrator true>>
 Narrator: THE GHOST LETS OUT AN OTHERWORLDLY HOWL AND FLIES AWAY, PROBABLY TO GO PICK ON SOMETHING ELSE.
 
@@ -12,7 +13,7 @@ Maledictus: …No thanks to you.
 <<Character Ogre false>>
 Ogre: T'would've been unsporting to gang up on it!
 
-<<Character Nicole true>>
+<<Character Nicole true true>>
 Nicole: Mhmm.
 
 <<Character Ogre false>>
@@ -58,4 +59,5 @@ Skeleton: Boo! Give me all of your food!
 <<Character Danny true>>
 Maledictus: Stay away from my friends!
 
+<<StartBattle>>
 ===
