@@ -21,7 +21,16 @@ public class GameManager : MonoBehaviour
 
     //Game Status variables
     private static int _playerHealth = 10;
-    public static int PlayerHealth => _playerHealth;
+
+    public static int PlayerHealth
+    {
+        get => _playerHealth;
+        set
+        {
+            _playerHealth = value;
+            audioEmitter.SetParameter("Health",_playerHealth);
+        }
+    }
 
     private static EnemyDice currentEnemy;
 
@@ -62,6 +71,8 @@ public class GameManager : MonoBehaviour
     private GameObject gameOver;
     private EnemyDisplay _enemyDisplay;
     private DialogueRunner _dialogueRunner;
+    private ResultWindowScript _resultWindow;
+    private static FMODUnity.StudioEventEmitter audioEmitter;
 
 
     private void Start()
@@ -86,10 +97,17 @@ public class GameManager : MonoBehaviour
         _RollDisplay.gameObject.SetActive(false);
 
         _dialogueRunner = FindObjectOfType<DialogueRunner>();
-        
-        _dialogueRunner.AddCommandHandler("StartBattle",PreBattle);
+
+        _dialogueRunner.AddCommandHandler("StartBattle", PreBattle);
+
+        _resultWindow = FindObjectOfType<ResultWindowScript>();
+        _resultWindow.gameObject.SetActive(false);
+
+        audioEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
         
         _playerHealth = 10;
+        audioEmitter.SetParameter("Death",0);
+        audioEmitter.SetParameter("Victory",0);
     }
 
     public static void ReloadScene()
@@ -134,6 +152,10 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Starting Battle Phase");
         
+        //Que music 
+        audioEmitter.Play();
+        audioEmitter.SetParameter("Battle",1f);
+        
         //Display Enemy
         _enemyDisplay.gameObject.SetActive(true);
         _enemyDisplay.LoadDisplay(CurrentEnemy);
@@ -144,7 +166,7 @@ public class GameManager : MonoBehaviour
         diceSelect.SetActive(true);
         if (tutorial)//Choose Dice Tutorial
         {
-            _dialogueRunner.StartDialogue("");
+            _dialogueRunner.StartDialogue("TutorialStart");
         }
         
         //Player chooses dice
@@ -167,12 +189,12 @@ public class GameManager : MonoBehaviour
         
         if (tutorial)//Enemy Dice Land Tutorial
         {
-            _dialogueRunner.StartDialogue("");
+            _dialogueRunner.StartDialogue("TutorialEnemyRoll");
         }
 
         if (lastBattle)//Talk before the final battle
         {
-            _dialogueRunner.StartDialogue("");
+            _dialogueRunner.StartDialogue("SlimeFightStart");
         }
         
         _RollPanel.SetActive(true);
@@ -190,14 +212,14 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-        if (tutorial)//Outcome Tutorial
-        {
-            _dialogueRunner.StartDialogue("");
-            while (_dialogueRunner.IsDialogueRunning)
-            {
-                yield return null;
-            }
-        }
+        // if (tutorial)//Outcome Tutorial
+        // {
+        //     _dialogueRunner.StartDialogue("");
+        //     while (_dialogueRunner.IsDialogueRunning)
+        //     {
+        //         yield return null;
+        //     }
+        // }
         _RollDisplay.gameObject.SetActive(false);
 
         // Dice Value is checked against Enemy Stats
@@ -205,17 +227,46 @@ public class GameManager : MonoBehaviour
         switch (CheckRollOutcome())
         {
             case -1 : //player takes damage
+                _resultWindow.gameObject.SetActive(true);
+                _resultWindow.OpenBox("Player Lost","Enemy's Damage Goes Through");
+                yield return new WaitForSeconds(1.5f);
+                if (tutorial)//Outcome Tutorial
+                {
+                    _dialogueRunner.StartDialogue("TutorialOuch");
+                    while (_dialogueRunner.IsDialogueRunning)
+                    {
+                        yield return null;
+                    }
+                }
+                _resultWindow.gameObject.SetActive(false);
                _playerHealth -= currentEnemy.DiceValue;
                _battleDisplay.UpdatePlayerHealth();
+               
                 Debug.Log("Player Lost Round");
                 break;
             case 0: //meets it beats it
             case 1: //enemy takes hit
+                _resultWindow.gameObject.SetActive(true);
+                _resultWindow.OpenBox("Player Win","Enemy Takes A Hit");
+                yield return new WaitForSeconds(1.5f);
+                if (tutorial)//Outcome Tutorial
+                {
+                    _dialogueRunner.StartDialogue("TutorialHit");
+                    while (_dialogueRunner.IsDialogueRunning)
+                    {
+                        yield return null;
+                    }
+                }
+                _resultWindow.gameObject.SetActive(false);
                 currentEnemy.TakeDamage();
                 _battleDisplay.UpdateEnemyHits(CurrentEnemy);
                 Debug.Log("Enemy Lost Round");
                 break;
             case 2: // Enemy it taken out
+                _resultWindow.gameObject.SetActive(true);
+                _resultWindow.OpenBox("KNOCKOUT!","Enemy TKO!!");
+                yield return new WaitForSeconds(1.5f);
+                _resultWindow.gameObject.SetActive(false);
                 currentEnemy.KnockedOut();
                 _battleDisplay.UpdateEnemyHits(CurrentEnemy);
                 Debug.Log("Enemy Was TKO'd!");
@@ -231,6 +282,7 @@ public class GameManager : MonoBehaviour
         // Enemy Dies
         if (!currentEnemy.IsAlive())
         {
+            audioEmitter.SetParameter("Victory",1);
             //start dialogue before killing enemy
             _dialogueRunner.StartDialogue(dialogueSequence[enemyIndex]);
             KillEnemy();
@@ -240,15 +292,15 @@ public class GameManager : MonoBehaviour
         // Player Dies
         if (_playerHealth <= 0)
         {
-            //TODO GAME OVER SCREEN
             if (lastBattle)//Died during the last battle
             {
-                _dialogueRunner.StartDialogue("");
+                _dialogueRunner.StartDialogue("SlimeFightDie");
                 //Revive the player?
             }
             else
             {
                 gameOver.SetActive(true);
+                audioEmitter.SetParameter("Death",1);
             }
             Debug.Log("GameOver");
         }

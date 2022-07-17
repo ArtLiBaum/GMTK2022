@@ -463,6 +463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4580931165974209963}
   - component: {fileID: 4580931165974209962}
+  - component: {fileID: 516663137}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -502,12 +503,50 @@ MonoBehaviour:
   - {fileID: 2498746012972756331, guid: 8f087d52635328d43b4697cf37134af4, type: 3}
   - {fileID: 4154432594776717074, guid: 84699484b7abd0948b46d8ee0a495ad4, type: 3}
   dialogueSequence:
-  - AfterTutorial
-  - AfterBattle 1
-  - EndGame
+  - PostTutorial
+  - PostFight
+  - Denouement
   EnemySpawn: {fileID: 4580931165894550564}
   tutorial: 0
   lastBattle: 0
+--- !u!114 &516663137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4580931165974209961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1070724212
+      Data2: 1330433924
+      Data3: 226365068
+      Data4: -978407691
+    Path: event:/Music/Combat
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params:
+  - Name: Battle
+    Value: 0
+  - Name: Death
+    Value: 0
+  - Name: Health
+    Value: 10
+  - Name: Victory
+    Value: 0
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &4580931165992706916
 GameObject:
   m_ObjectHideFlags: 0
