@@ -99,6 +99,8 @@ public class GameManager : MonoBehaviour
         _dialogueRunner = FindObjectOfType<DialogueRunner>();
 
         _dialogueRunner.AddCommandHandler("StartBattle", PreBattle);
+        _dialogueRunner.AddCommandHandler("TutorialStart",SetTutorial);
+        _dialogueRunner.AddCommandHandler("FinalBattleStart",SetFinalBattle);
 
         _resultWindow = FindObjectOfType<ResultWindowScript>();
         _resultWindow.gameObject.SetActive(false);
@@ -113,6 +115,15 @@ public class GameManager : MonoBehaviour
     public static void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void SetTutorial()
+    {
+        tutorial = true;}
+
+    void SetFinalBattle()
+    {
+        lastBattle = true;
     }
     
     int CheckRollOutcome()
@@ -155,6 +166,7 @@ public class GameManager : MonoBehaviour
         //Que music 
         audioEmitter.Play();
         audioEmitter.SetParameter("Battle",1f);
+        SFXManager.instance.PlayRoar();
         
         //Display Enemy
         _enemyDisplay.gameObject.SetActive(true);
@@ -212,14 +224,6 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-        // if (tutorial)//Outcome Tutorial
-        // {
-        //     _dialogueRunner.StartDialogue("");
-        //     while (_dialogueRunner.IsDialogueRunning)
-        //     {
-        //         yield return null;
-        //     }
-        // }
         _RollDisplay.gameObject.SetActive(false);
 
         // Dice Value is checked against Enemy Stats
@@ -228,8 +232,9 @@ public class GameManager : MonoBehaviour
         {
             case -1 : //player takes damage
                 _resultWindow.gameObject.SetActive(true);
+                SFXManager.instance.PlayFail();
                 _resultWindow.OpenBox("Player Lost","Enemy's Damage Goes Through");
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(2.5f);
                 if (tutorial)//Outcome Tutorial
                 {
                     _dialogueRunner.StartDialogue("TutorialOuch");
@@ -238,17 +243,21 @@ public class GameManager : MonoBehaviour
                         yield return null;
                     }
                 }
+                SFXManager.instance.PlayPlayerHit();
                 _resultWindow.gameObject.SetActive(false);
                _playerHealth -= currentEnemy.DiceValue;
                _battleDisplay.UpdatePlayerHealth();
+                
+                yield return new WaitForSeconds(1f);
                
                 Debug.Log("Player Lost Round");
                 break;
             case 0: //meets it beats it
             case 1: //enemy takes hit
                 _resultWindow.gameObject.SetActive(true);
+                SFXManager.instance.PlaySuccess();
                 _resultWindow.OpenBox("Player Win","Enemy Takes A Hit");
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(2.5f);
                 if (tutorial)//Outcome Tutorial
                 {
                     _dialogueRunner.StartDialogue("TutorialHit");
@@ -264,6 +273,7 @@ public class GameManager : MonoBehaviour
                 break;
             case 2: // Enemy it taken out
                 _resultWindow.gameObject.SetActive(true);
+                SFXManager.instance.PlaySuccess();
                 _resultWindow.OpenBox("KNOCKOUT!","Enemy TKO!!");
                 yield return new WaitForSeconds(1.5f);
                 _resultWindow.gameObject.SetActive(false);
@@ -304,5 +314,7 @@ public class GameManager : MonoBehaviour
             }
             Debug.Log("GameOver");
         }
+
+        tutorial = lastBattle = false;
     }
 }

@@ -192,7 +192,7 @@ MonoBehaviour:
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
 --- !u!114 &2871000041967398135
 MonoBehaviour:
@@ -1407,7 +1407,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enemy Take a Hit
+  m_text: BLAH BLAH BLAH BALH BALH
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03de8054dfd90fb4bade386331faea6a, type: 2}
   m_sharedMaterial: {fileID: 8106943711253321013, guid: 03de8054dfd90fb4bade386331faea6a, type: 2}
@@ -1434,10 +1434,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.34
+  m_fontSize: 26.5
   m_fontSizeBase: 44.34
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0

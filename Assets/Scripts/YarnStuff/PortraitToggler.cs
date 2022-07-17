@@ -18,13 +18,13 @@ public class PortraitToggler : MonoBehaviour
 
     private void Awake()
     {
-        Runner.AddCommandHandler<string, bool>("Character", ChangePortrait);
+        Runner.AddCommandHandler<string, bool, bool>("Character", ChangePortrait);
 
         LeftPortrait.sprite = Pairs[0].MySprite;
     }
 
 
-    public void ChangePortrait(string character, bool left)
+    public void ChangePortrait(string character, bool left, bool flipped = false)
     {
         LeftPortrait.gameObject.SetActive(left);
         RightPortrait.gameObject.SetActive(!left);
@@ -36,10 +36,12 @@ public class PortraitToggler : MonoBehaviour
             if (left)
             {
                 LeftPortrait.sprite = Pairs[pairStrings.IndexOf(character)].MySprite;
+                LeftPortrait.rectTransform.localRotation = flipped ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
             }
             else
             {
                 RightPortrait.sprite = Pairs[pairStrings.IndexOf(character)].MySprite;
+                RightPortrait.rectTransform.localRotation = flipped ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
             }
         }
 

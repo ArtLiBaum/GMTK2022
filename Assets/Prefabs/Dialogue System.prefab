@@ -1150,7 +1150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bec29c0a230741bdac901dba8da47ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yarnProject: {fileID: 7545569452688597077, guid: c8059de296f195c40ab72e0d0574850f, type: 3}
+  yarnProject: {fileID: 7545569452688597077, guid: 970f2f1b48b81894a85de3062ec5b8d5, type: 3}
   _variableStorage: {fileID: 6368900666754990224}
   dialogueViews:
   - {fileID: 2464331521263187524}
@@ -1448,16 +1448,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4bef1a0e874be24389cd469817a62ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Runner: {fileID: 7590503517968881171}
-  MainCharPortrait: {fileID: 7590503517051342169}
-  SecondaryCharPortrait: {fileID: 7590503518995525234}
+  Runner: {fileID: 0}
+  LeftPortrait: {fileID: 7590503517051342169}
+  RightPortrait: {fileID: 7590503518995525234}
   Pairs:
   - CharacterName: Danny
     MySprite: {fileID: 21300000, guid: 0535ba91287abc74ca213cfa8fefcb3e, type: 3}
-  - CharacterName: Yarn
-    MySprite: {fileID: 21300000, guid: d761f46dcd8beeb4d8e02fed97fbc61d, type: 3}
-  - CharacterName: Rando
-    MySprite: {fileID: 21300000, guid: 6ee56700d9f75b94b80c5bf4969f45b3, type: 3}
+  - CharacterName: Danny2
+    MySprite: {fileID: 21300000, guid: 216fec30810e6b14fadcb1f411936aa9, type: 3}
+  - CharacterName: Narrator
+    MySprite: {fileID: 21300000, guid: 924636cf6e431bf43aa50cdbb1d7de8f, type: 3}
+  - CharacterName: Nicole
+    MySprite: {fileID: 21300000, guid: 097fb5e6aae9a92419b96d39cdfa94fe, type: 3}
+  - CharacterName: Ogre
+    MySprite: {fileID: 21300000, guid: 6691f3fbb2460784984120780876f799, type: 3}
+  - CharacterName: Skeleton
+    MySprite: {fileID: 21300000, guid: 097a88a69f5a7a44e95cab2dc70dcdd4, type: 3}
 --- !u!1 &7590503518995525232
 GameObject:
   m_ObjectHideFlags: 0

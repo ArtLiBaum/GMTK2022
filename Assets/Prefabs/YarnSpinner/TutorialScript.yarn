@@ -1,6 +1,8 @@
 ﻿title: TutorialStart
 ---
-<<Character Nicole true>>
+<<TutorialStart>>
+
+<<Character Nicole true true>>
 Nicole: Let's show this bully!
 Nicole: Heads up, Sweetcake, you're gonna need a roll of 15 or higher to damage this ghost!
 Nicole: Why don't you choose some less corporeal friends to help you out with this one?
@@ -9,7 +11,7 @@ Nicole: Why don't you choose some less corporeal friends to help you out with th
 
 title: TutorialEnemyRoll
 ---
-<<Character Nicole true>>
+<<Character Nicole true true>>
 Nicole: Better watch out! If you don't roll over this ghost's toughness it'll hit you!
 Nicole: Ghosts these days - picking on children.
 ===
