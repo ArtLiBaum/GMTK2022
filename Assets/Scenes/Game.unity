@@ -230,10 +230,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5366097264796721044, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: optionViewPrefab
-      value: 
-      objectReference: {fileID: 320030034337930081, guid: a4ab99f69e5fa0e4db93f0abcb7d0fbc, type: 3}
     - target: {fileID: 5528066541080052434, guid: baa69b859b1225042babcd08917a56f1, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -241,10 +237,6 @@ PrefabInstance:
     - target: {fileID: 5528066541080052434, guid: baa69b859b1225042babcd08917a56f1, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5528066541080052434, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -107.538025
       objectReference: {fileID: 0}
     - target: {fileID: 6427343831440828070, guid: baa69b859b1225042babcd08917a56f1, type: 3}
       propertyPath: m_SizeDelta.y
@@ -302,14 +294,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dialogue System
       objectReference: {fileID: 0}
-    - target: {fileID: 7347071824928662800, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7590503518995525235, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -117.99994
-      objectReference: {fileID: 0}
+    - target: {fileID: 7590503517406470504, guid: baa69b859b1225042babcd08917a56f1, type: 3}
+      propertyPath: Runner
+      value: 
+      objectReference: {fileID: 61886149}
     - target: {fileID: 8368441975209021980, guid: baa69b859b1225042babcd08917a56f1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -334,36 +322,19 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 813961635}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayUIClick
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: SFXManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622952247293465229, guid: baa69b859b1225042babcd08917a56f1, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: baa69b859b1225042babcd08917a56f1, type: 3}
+--- !u!114 &61886149 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7590503517968881171, guid: baa69b859b1225042babcd08917a56f1, type: 3}
+  m_PrefabInstance: {fileID: 12258351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bec29c0a230741bdac901dba8da47ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &164969782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1320,33 +1291,9 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 813961635}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlayUIClick
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: SFXManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6501066795589283588, guid: 77078265314092e479cc2e02fa83034e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 9013463075000813643, guid: 77078265314092e479cc2e02fa83034e, type: 3}
       propertyPath: m_Camera
       value: 
