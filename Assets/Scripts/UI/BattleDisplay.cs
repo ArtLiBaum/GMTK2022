@@ -18,7 +18,7 @@ public class BattleDisplay : MonoBehaviour
     private Slider healthBar;
     private GameObject enemyHits;
     private Transform[] hitObj;
-    private void Start()
+    private void Awake()
     {
         _RollPanel = transform.Find("RollPanel").gameObject;
         _RollButton = _RollPanel.transform.Find("RollButton").GetComponent<Button>();

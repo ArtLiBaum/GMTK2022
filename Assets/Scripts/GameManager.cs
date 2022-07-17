@@ -5,29 +5,26 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Yarn.Unity;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static TMP_Text _RollDisplay;
-    private GameObject _RollPanel;
-    private Button _RollButton;
-    private BattleDisplay _battleDisplay;
-    [SerializeField] private List<GameObject> enemyDiceQueue;
-    private int enemyIndex = 0;
-    [SerializeField] private Transform EnemySpawn;
-
-    public static EnemyDice currentEnemy;
-    private DiceManager _diceManager;
-
-    private GameObject diceSelect;
-    private EnemyDisplay _enemyDisplay;
-
-    private DialogueRunner _dialogueRunner;
-
+    
     public bool battling = false;
+    
+    [SerializeField] private List<GameObject> enemyDiceQueue;
+    [SerializeField] private List<string> dialogueSequence;
+    [SerializeField] private Transform EnemySpawn;
+    [SerializeField] private bool tutorial = false;
+    [SerializeField] private bool lastBattle = false;
+    
 
-    private static int _playerHealth = 5;
+    //Game Status variables
+    private static int _playerHealth = 10;
     public static int PlayerHealth => _playerHealth;
+
+    private static EnemyDice currentEnemy;
+
     public EnemyDice CurrentEnemy
     {
         get
@@ -43,7 +40,6 @@ public class GameManager : MonoBehaviour
         set => currentEnemy = value;
     }
     
-
     private static int rollResult;
     public static int RollResult
     {
@@ -54,6 +50,18 @@ public class GameManager : MonoBehaviour
             _RollDisplay.text = rollResult.ToString();
         }
     }
+    
+    private int enemyIndex = 0; //used for enemy and dialogue sequencing
+    
+    //External References
+    private static TMP_Text _RollDisplay;
+    private GameObject _RollPanel;
+    private BattleDisplay _battleDisplay;
+    private DiceManager _diceManager;
+    private GameObject diceSelect;
+    private GameObject gameOver;
+    private EnemyDisplay _enemyDisplay;
+    private DialogueRunner _dialogueRunner;
 
 
     private void Start()
@@ -69,8 +77,10 @@ public class GameManager : MonoBehaviour
         diceSelect.SetActive(false);
         
         _RollPanel = _battleDisplay.RollPanel;
-        _RollButton = _battleDisplay.RollButton;
         _RollDisplay = _battleDisplay.RollDisplay;
+
+        gameOver = combat.transform.Find("GameOver").gameObject;
+        gameOver.SetActive(false);
         
         _RollPanel.SetActive(false);
         _RollDisplay.gameObject.SetActive(false);
@@ -79,11 +89,14 @@ public class GameManager : MonoBehaviour
         
         _dialogueRunner.AddCommandHandler("StartBattle",PreBattle);
         
-        _playerHealth = 5;
-
-        //TEMP FOR TESTING
+        _playerHealth = 10;
     }
 
+    public static void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    
     int CheckRollOutcome()
     {
         if (rollResult < currentEnemy.Toughness)
@@ -112,7 +125,7 @@ public class GameManager : MonoBehaviour
         battling = true;
     }
 
-    void PreBattle()
+    void PreBattle() //used to call coroutine
     {
         StartCoroutine(BattlePhase());
     }
@@ -126,8 +139,13 @@ public class GameManager : MonoBehaviour
         _enemyDisplay.LoadDisplay(CurrentEnemy);
         yield return new WaitForSeconds(4f);
         _enemyDisplay.gameObject.SetActive(false);
+        
         //Give dice select option
         diceSelect.SetActive(true);
+        if (tutorial)//Choose Dice Tutorial
+        {
+            _dialogueRunner.StartDialogue("");
+        }
         
         //Player chooses dice
         while (!battling)
@@ -146,6 +164,17 @@ public class GameManager : MonoBehaviour
             yield return null;//wait for enemy dice to resolve
         }
         
+        
+        if (tutorial)//Enemy Dice Land Tutorial
+        {
+            _dialogueRunner.StartDialogue("");
+        }
+
+        if (lastBattle)//Talk before the final battle
+        {
+            _dialogueRunner.StartDialogue("");
+        }
+        
         _RollPanel.SetActive(true);
         _RollDisplay.gameObject.SetActive(true);
         
@@ -161,6 +190,14 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
+        if (tutorial)//Outcome Tutorial
+        {
+            _dialogueRunner.StartDialogue("");
+            while (_dialogueRunner.IsDialogueRunning)
+            {
+                yield return null;
+            }
+        }
         _RollDisplay.gameObject.SetActive(false);
 
         // Dice Value is checked against Enemy Stats
@@ -194,14 +231,25 @@ public class GameManager : MonoBehaviour
         // Enemy Dies
         if (!currentEnemy.IsAlive())
         {
-            //TODO: Load Next Sequence
+            //start dialogue before killing enemy
+            _dialogueRunner.StartDialogue(dialogueSequence[enemyIndex]);
             KillEnemy();
+            
             Debug.Log("EnemyDefeated");
         }
         // Player Dies
         if (_playerHealth <= 0)
         {
             //TODO GAME OVER SCREEN
+            if (lastBattle)//Died during the last battle
+            {
+                _dialogueRunner.StartDialogue("");
+                //Revive the player?
+            }
+            else
+            {
+                gameOver.SetActive(true);
+            }
             Debug.Log("GameOver");
         }
     }

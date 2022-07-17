@@ -1010,6 +1010,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameCore
       objectReference: {fileID: 0}
+    - target: {fileID: 4580931165974209962, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
+      propertyPath: tutorial
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580931165974209962, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
+      propertyPath: dialogueSequence.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580931165974209962, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
+      propertyPath: dialogueSequence.Array.data[0]
+      value: AfterTutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580931165974209962, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
+      propertyPath: dialogueSequence.Array.data[1]
+      value: AfterBattle 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580931165974209962, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
+      propertyPath: dialogueSequence.Array.data[2]
+      value: EndGame
+      objectReference: {fileID: 0}
     - target: {fileID: 4675836657233217879, guid: 00d54d5e38f3d3441b52fe2a62b29eaf, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1342,6 +1362,10 @@ PrefabInstance:
     - target: {fileID: 3121972481865574631, guid: 9f895c50bb1909940b9c4250c330ff15, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3443542789175460593, guid: 9f895c50bb1909940b9c4250c330ff15, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -43.475037
       objectReference: {fileID: 0}
     - target: {fileID: 3558934300908689788, guid: 9f895c50bb1909940b9c4250c330ff15, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1697,7 +1721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8608758050890315648, guid: 9f895c50bb1909940b9c4250c330ff15, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -267.00003
+      value: -267
       objectReference: {fileID: 0}
     - target: {fileID: 8751407830665224599, guid: 9f895c50bb1909940b9c4250c330ff15, type: 3}
       propertyPath: m_AnchorMax.y
