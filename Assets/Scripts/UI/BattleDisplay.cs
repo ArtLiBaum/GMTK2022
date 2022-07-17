@@ -13,7 +13,6 @@ public class BattleDisplay : MonoBehaviour
     private GameObject _RollPanel;
     public GameObject RollPanel => _RollPanel;
     private Button _RollButton;
-    public Button RollButton => _RollButton;
 
     private Slider healthBar;
     private GameObject enemyHits;
@@ -22,11 +21,15 @@ public class BattleDisplay : MonoBehaviour
     {
         _RollPanel = transform.Find("RollPanel").gameObject;
         _RollButton = _RollPanel.transform.Find("RollButton").GetComponent<Button>();
-        _RollButton.onClick.AddListener(DiceManager.instance.RollAllDice);
         _RollDisplay = transform.Find("RollDisplay").GetComponent<TMP_Text>();
         healthBar = transform.Find("HealthBar").GetComponent<Slider>();
         enemyHits = transform.Find("Hits").gameObject;
         hitObj = enemyHits.transform.GetComponentsInChildren<Transform>();
+    }
+
+    private void Start()
+    {
+        _RollButton.onClick.AddListener(DiceManager.instance.RollAllDice);
     }
 
     public void UpdatePlayerHealth()

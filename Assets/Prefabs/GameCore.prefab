@@ -496,12 +496,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7264719a512b98443a92ed163440268b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battling: 0
   enemyDiceQueue:
   - {fileID: 1246636397943011084, guid: 2655eae4cae60084798b22796367bc19, type: 3}
   - {fileID: 2498746012972756331, guid: 8f087d52635328d43b4697cf37134af4, type: 3}
   - {fileID: 4154432594776717074, guid: 84699484b7abd0948b46d8ee0a495ad4, type: 3}
+  dialogueSequence:
+  - AfterTutorial
+  - AfterBattle 1
+  - EndGame
   EnemySpawn: {fileID: 4580931165894550564}
-  battling: 0
+  tutorial: 0
+  lastBattle: 0
 --- !u!1 &4580931165992706916
 GameObject:
   m_ObjectHideFlags: 0

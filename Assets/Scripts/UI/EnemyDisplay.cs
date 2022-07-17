@@ -12,6 +12,11 @@ public class EnemyDisplay : MonoBehaviour
 
     private void Start()
     {
+        Initialize();
+    }
+
+    void Initialize()
+    {
         portrait = transform.Find("Image").GetComponent<Image>();
         enemyName = transform.Find("Name").GetComponent<TMP_Text>();
         hits = transform.Find("Stats/Hits").gameObject;
@@ -22,6 +27,7 @@ public class EnemyDisplay : MonoBehaviour
 
     public void LoadDisplay(EnemyDice enemy)
     {
+        if(portrait == null) Initialize();
         portrait.sprite = enemy.Portrait;
         enemyName.text = enemy.EnemyName;
         toughness.text = "TOUGHNESS: " + enemy.Toughness;
