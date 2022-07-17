@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{d07842b9-f47c-4a46-af47-7213c5e3f2f9}">
+		<property name="assetPath">
+			<value>Music/Battle Phase_Stinger.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>7.128729166666667</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3fe4fef5-0213-41f6-8a71-6665a1e02612}</destination>
+		</relationship>
+	</object>
+</objects>

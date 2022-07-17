@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b9027193-d014-4bd9-bbcc-1eea00420841}">
+		<property name="assetPath">
+			<value>Music/Player_Victory_Flourish.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>28.843250000000001</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3fe4fef5-0213-41f6-8a71-6665a1e02612}</destination>
+		</relationship>
+	</object>
+</objects>

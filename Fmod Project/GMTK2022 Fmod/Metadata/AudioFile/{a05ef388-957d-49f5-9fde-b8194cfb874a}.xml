@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{a05ef388-957d-49f5-9fde-b8194cfb874a}">
+		<property name="assetPath">
+			<value>Music/Player_Death_Flourish2.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>7.128708333333333</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{3fe4fef5-0213-41f6-8a71-6665a1e02612}</destination>
+		</relationship>
+	</object>
+</objects>
