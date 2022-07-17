@@ -18,4 +18,8 @@ public class OgreDice : PlayerDice
         base.SideValueCheck();
         return diceValue += powerUp;
     }
+    public override void Update()
+    {
+        base.Update();
+    }
 }

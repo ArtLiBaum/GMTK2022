@@ -61,7 +61,7 @@ public class ParticleManager : MonoBehaviour
             }
         }
 
-        ParticleSystem l = Instantiate(hitPrefab).GetComponent<ParticleSystem>();
+        ParticleSystem l = Instantiate(landPrefab).GetComponent<ParticleSystem>();
         lands.Add(l);
         return l;
     }

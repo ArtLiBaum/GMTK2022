@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private static EnemyDice currentEnemy;
+    private EnemyDice currentEnemy;
 
     public EnemyDice CurrentEnemy
     {
@@ -140,12 +140,13 @@ public class GameManager : MonoBehaviour
     void Restart()
     {
         _diceManager.ResetAllDice();
-        currentEnemy.Reset();
+        CurrentEnemy.Reset();
     }
 
     void KillEnemy()
     {
-        Destroy(currentEnemy.gameObject);
+        currentEnemy.gameObject.SetActive(false);
+        currentEnemy = null;
         ++enemyIndex;
     }
     
@@ -162,7 +163,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator BattlePhase()
     {
         Debug.Log("Starting Battle Phase");
-        
+
         //Que music 
         audioEmitter.Play();
         audioEmitter.SetParameter("Battle",1f);
@@ -170,10 +171,14 @@ public class GameManager : MonoBehaviour
         
         //Display Enemy
         _enemyDisplay.gameObject.SetActive(true);
+        _battleDisplay.UpdatePlayerHealth();
+        _battleDisplay.UpdateEnemyHits(CurrentEnemy);
         _enemyDisplay.LoadDisplay(CurrentEnemy);
         yield return new WaitForSeconds(4f);
         _enemyDisplay.gameObject.SetActive(false);
         
+
+
         //Give dice select option
         diceSelect.SetActive(true);
         if (tutorial)//Choose Dice Tutorial
@@ -297,6 +302,7 @@ public class GameManager : MonoBehaviour
             _dialogueRunner.StartDialogue(dialogueSequence[enemyIndex]);
             KillEnemy();
             
+          tutorial = lastBattle = false;
             Debug.Log("EnemyDefeated");
         }
         // Player Dies
@@ -315,6 +321,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameOver");
         }
 
-        tutorial = lastBattle = false;
+        battling = false;
+        audioEmitter.SetParameter("Battle",0f);
+        audioEmitter.Stop();
     }
 }

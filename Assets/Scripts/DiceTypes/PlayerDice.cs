@@ -14,4 +14,8 @@ public class PlayerDice : Dice
     
     public virtual void RoundUpGrade()
     {}
+    public override void Update()
+    {
+        base.Update();
+    }
 }

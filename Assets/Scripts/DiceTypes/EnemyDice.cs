@@ -78,4 +78,9 @@ public class EnemyDice : Dice
     {
         return hits > 0;
     }
+
+    public override void Update()
+    {
+        base.Update();
+    }
 }

@@ -82,6 +82,10 @@ public class DiceManager : MonoBehaviour
             SpawnDice();
             isDirty = false;
         }
+        else
+        {
+            ResetAllDice();
+        }
     }
 
     public void RollAllDice()

@@ -10,10 +10,9 @@ public class BonePileEnemyDice : EnemyDice
         base.SpecialAbility();
         BoostHits();
     }
-
-    // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        
+        base.Update();
     }
+    
 }

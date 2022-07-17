@@ -24,7 +24,7 @@ public class Dice : MonoBehaviour
         if (_rigidbody == null)
         {
             Initialize();
-            _rigidbody.useGravity = false;
+            Reset();
         }
     }
 
@@ -35,7 +35,7 @@ public class Dice : MonoBehaviour
         _sides = GetComponentsInChildren<DiceSide>();
     }
 
-    private void Update()
+    public virtual void Update()
     {
         //if has landed correctly
         if (_rigidbody.IsSleeping() && !Landed && _thrown)

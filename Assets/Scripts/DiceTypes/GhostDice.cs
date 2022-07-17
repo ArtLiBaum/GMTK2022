@@ -16,4 +16,8 @@ public class GhostDice : PlayerDice
         //Reduce Enemy's toughness by 1 per ghost
         _manager.CurrentEnemy.Weaken();
     }
+    public override void Update()
+    {
+        base.Update();
+    }
 }

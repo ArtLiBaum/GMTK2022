@@ -46,6 +46,8 @@ Narrator: …ONE QUITE UNLIKE LIKE NICOLE, MALEDICTUS NOTED.
 <<Character Ogre false>>
 Ogre: My saviours arrive! Please, dispose of this fiend posthaste so that I may return to my abode in safety!
 
+<<TutorialStart>>
+<<BackgroundActive false>>
 <<StartBattle>>
 
 ===
