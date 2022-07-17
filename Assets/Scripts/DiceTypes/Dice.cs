@@ -42,6 +42,7 @@ public class Dice : MonoBehaviour
         {
             Landed = true;
             DiceManager.Landed();
+            ParticleManager.Intsance.LandBurst(transform.position);
             _rigidbody.useGravity = false;
             SideValueCheck();
         }
@@ -88,5 +89,13 @@ public class Dice : MonoBehaviour
         }
 
         return 0;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_thrown)
+        {
+            ParticleManager.Intsance.HitBurst(collision.GetContact(0).point);
+        }
     }
 }
