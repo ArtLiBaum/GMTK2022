@@ -14,11 +14,14 @@ public class PortraitToggler : MonoBehaviour
     public Image LeftPortrait;
     public Image RightPortrait;
 
+    public GameObject EndCard;
+
     public List<StringSpritePair> Pairs;
 
     private void Awake()
     {
         Runner.AddCommandHandler<string, bool, bool>("Character", ChangePortrait);
+        Runner.AddCommandHandler("DoEndCard", ActivateEndCard);
 
         LeftPortrait.sprite = Pairs[0].MySprite;
     }
@@ -45,6 +48,11 @@ public class PortraitToggler : MonoBehaviour
             }
         }
 
+    }
+
+    public void ActivateEndCard()
+    {
+        EndCard.SetActive(true);
     }
 
 }
