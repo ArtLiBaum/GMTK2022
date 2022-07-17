@@ -1,0 +1,29 @@
+﻿title: TutorialStart
+---
+<<Character Nicole true>>
+Nicole: Let's show this bully!
+Nicole: Heads up, Sweetcake, you're gonna need a roll of 15 or higher to damage this ghost!
+Nicole: Why don't you choose some less corporeal friends to help you out with this one?
+===
+
+
+title: TutorialEnemyRoll
+---
+<<Character Nicole true>>
+Nicole: Better watch out! If you don't roll over this ghost's toughness it'll hit you!
+Nicole: Ghosts these days - picking on children.
+===
+
+
+title: TutorialHit
+---
+<<Character Ogre false>>
+Ogre: A magnificent strike, sire! This foul creature shall have no choice but to retreat in one more of such blows!
+===
+
+
+title: TutorialOuch
+---
+<<Character Ogre false>>
+Ogre: Careful, sire! Ten damage and you'll be knocked out!
+===
