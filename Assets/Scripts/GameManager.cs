@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Yarn.Unity;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class GameManager : MonoBehaviour
 
     private GameObject diceSelect;
     private EnemyDisplay _enemyDisplay;
+
+    private DialogueRunner _dialogueRunner;
+
+    public bool battling = false;
 
     private static int _playerHealth = 5;
     public static int PlayerHealth => _playerHealth;
@@ -70,11 +75,13 @@ public class GameManager : MonoBehaviour
         _RollPanel.SetActive(false);
         _RollDisplay.gameObject.SetActive(false);
 
-
+        _dialogueRunner = FindObjectOfType<DialogueRunner>();
+        
+        _dialogueRunner.AddCommandHandler("StartBattle",PreBattle);
+        
         _playerHealth = 5;
 
         //TEMP FOR TESTING
-        StartCoroutine(PreBattle());
     }
 
     int CheckRollOutcome()
@@ -99,36 +106,40 @@ public class GameManager : MonoBehaviour
         Destroy(currentEnemy.gameObject);
         ++enemyIndex;
     }
-
-    public IEnumerator PreBattle()
+    
+    public void StartBattle()
     {
-        //Display enemy
-        //TODO populate display with current enemy
+        battling = true;
+    }
+
+    void PreBattle()
+    {
+        StartCoroutine(BattlePhase());
+    }
+
+    public IEnumerator BattlePhase()
+    {
+        Debug.Log("Starting Battle Phase");
         
-        
+        //Display Enemy
         _enemyDisplay.gameObject.SetActive(true);
         _enemyDisplay.LoadDisplay(CurrentEnemy);
         yield return new WaitForSeconds(4f);
         _enemyDisplay.gameObject.SetActive(false);
         //Give dice select option
         diceSelect.SetActive(true);
-    }
-
-    public void StartBattle()
-    {
-        //Called after Player Chooses Dice
-        StartCoroutine(BattlePhase());
+        
+        //Player chooses dice
+        while (!battling)
+            yield return null;
         diceSelect.SetActive(false);
-    }
-
-   public IEnumerator BattlePhase()
-    {
-        RestartRound:
+        
         _diceManager.ActivateSpecials();
+        
+        RestartRound:
         _diceManager.NewRound();
         CurrentEnemy.RollDice();
-        
-        
+
         //Enemy Rolls its Damage
         while (!CurrentEnemy.Landed)
         {
